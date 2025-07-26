@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import logging
 from collections import deque
+#doesgitwork
 
 #CurrentTestingModule
 #11
@@ -80,6 +81,8 @@ def set_leverage(symbol, leverage):
             logging.info(f"Leverage already set to {leverage}x for {symbol}")
         else:
             logging.error(f"Failed to set leverage: {e}")
+
+
 
 # Dynamic calculation of the price so the usdt is set on price not order
 def calculate_order_quantity(current_price, leverage, usdt_amount, precision, min_qty):
@@ -202,11 +205,7 @@ def calculate_rsi_wilder(df, period=14):
     df['rsi'] = rsi
     return df
 
-# Open interest and volume histories
-open_interest_history = {
-    '5m': deque(maxlen=3),
-    '15m': deque(maxlen=3)
-}
+
 
 #Trackers for open orders
 open_order_id = None
@@ -233,7 +232,7 @@ def fetch_open_interest(symbol, interval='5min'):
         logging.error(f"Failed to fetch open interest: {e}")
         return None, None
 
-# Place real order
+# Place real order####
 #Retryorder are batches, retries are the individual attempts.
 def place_limit_order_with_retry(symbol, side, quantity, current_price=None, retries=3, retryorder=10, wait_timeout=180, retrydelay=5, delay=10, reduce_only=False):
     for retry_count in range(1, retryorder + 1):  # Outer retry group
@@ -299,7 +298,20 @@ def place_limit_order_with_retry(symbol, side, quantity, current_price=None, ret
     logging.error("❌ All retry attempts failed.")
     return None, 0, 0
 
-            
+ #fetch_close_prices
+ # fetch_close_prices
+def fetch_close_prices(symbol, timeframe, limit=2):
+    try:
+        ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
+        if ohlcv is None or len(ohlcv) < 2:
+            return None
+        closes = [candle[4] for candle in ohlcv]  # index 4 is close price
+        return closes
+    except Exception as e:
+        logging.error(f"Failed to fetch {timeframe} close prices: {e}")
+        return None
+
+           
 
 # Close position
 def close_position(symbol, side, quantity, current_price):
@@ -342,6 +354,10 @@ def trade():
     exit_fee_cost = 0
     funding_fee = 0
     entry_time = None
+    prev_oi_5m = None
+    prev_oi_15m = None
+    prev_close_5m = None
+    prev_close_15m = None
     #last_trend = None #long or short
     #trade_executed_in_trend = False
     #trend_cycle_id = 0
@@ -352,6 +368,36 @@ def trade():
         df = fetch_ohlcv(SYMBOL, '1m')
         if df is None:
             continue
+
+       
+     
+
+        
+        
+        oi_5m_now, _ = fetch_open_interest(SYMBOL, interval='5min')
+        oi_15m_now, _ = fetch_open_interest(SYMBOL, interval='15min')
+
+        if prev_oi_5m is not None and prev_oi_15m is not None:
+            oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
+            oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
+        else:
+            oi_increasing = False
+            oi_decreasing = False
+        #1
+        # --- ADD DEBUG LOG HERE ---
+        if price_up and oi_increasing:
+            logging.info("DEBUG: Price increased on 5m and 15m AND Open Interest increased on 5m and 15m simultaneously.")
+
+        # Update previous OI values for next loop##
+        prev_oi_5m = oi_5m_now
+        prev_oi_15m = oi_15m_now
+
+        if oi_5m_now is None or oi_15m_now is None:
+            logging.warning("Open interest fetch returned None, skipping iteration.")
+            time.sleep(60)
+            continue
+        
+
 
         df = calculate_emas(df)
         trend_text, ema_condition = check_trend(df)
@@ -367,30 +413,17 @@ def trade():
         df = calculate_atr_rma(df, period=14)
         atr_value = df['ATR_RMA'].iloc[-1]
 
-        oi_5m, _ = fetch_open_interest(SYMBOL, interval='5min')
-        oi_15m, _ = fetch_open_interest(SYMBOL, interval='15min')
-        if None in (oi_5m, oi_15m):
-            continue
-
-        open_interest_history['5m'].append(oi_5m)
-        open_interest_history['15m'].append(oi_15m)
-        oi_5m_list = list(open_interest_history['5m'])
-        oi_15m_list = list(open_interest_history['15m'])
-
-        oi_increasing = (
-            len(oi_5m_list) == 2 and
-            len(oi_15m_list) == 2 and
-            oi_5m_list[1] > oi_5m_list[0] and
-            oi_15m_list[1] > oi_15m_list[0]
-        )
-
-        oi_decreasing = (
-            len(oi_5m_list) == 2 and 
-            len(oi_15m_list) == 2 and
-            oi_5m_list[1] < oi_5m_list[0] and
-            oi_15m_list[1] < oi_15m_list[0]
-
-        )
+        # Fetch close prices for last 2 bars of 5m and 15m
+        close_5m = fetch_close_prices(SYMBOL, '5m', limit=2)
+        close_15m = fetch_close_prices(SYMBOL, '15m', limit=2)
+        if close_5m and close_15m:
+            price_up = close_5m[-1] > close_5m[-2] and close_15m[-1] > close_15m[-2]
+            price_down = close_5m[-1] < close_5m[-2] and close_15m[-1] < close_15m[-2]
+        else:
+            price_up = False
+            price_down = False
+        
+        
 
 
 
@@ -468,7 +501,7 @@ def trade():
                 #time.sleep(60)
                 #continue
 
-            if ema_condition == 'long' and cleared_condition == 'long_clear' and oi_increasing:
+            if ema_condition == 'long' and cleared_condition == 'long_clear' and oi_increasing and price_up:
                 if rsi_value >= 70:
                     logging.info(f"RSI too high for entry: {rsi_value:.2f}. Skipping Trade.")
                     time.sleep(60)
@@ -526,7 +559,7 @@ def trade():
             
             
             
-            elif ema_condition == 'short' and cleared_condition == 'short_clear' and oi_increasing:
+            elif ema_condition == 'short' and cleared_condition == 'short_clear' and oi_increasing and price_down:
                 if rsi_value <= 30:
                     logging.info(f"RSI too low for entry: {rsi_value:.2f}.Skipping Trade")
                     time.sleep(60)
