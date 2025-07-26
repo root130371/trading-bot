@@ -383,10 +383,8 @@ def trade():
         else:
             oi_increasing = False
             oi_decreasing = False
-        #1
-        # --- ADD DEBUG LOG HERE ---
-        if price_up and oi_increasing:
-            logging.info("DEBUG: Price increased on 5m and 15m AND Open Interest increased on 5m and 15m simultaneously.")
+        
+        
 
         # Update previous OI values for next loop##
         prev_oi_5m = oi_5m_now
@@ -424,7 +422,9 @@ def trade():
             price_down = False
         
         
-
+        # --- ADD DEBUG LOG HERE ---
+        if price_up and oi_increasing:
+            logging.info("DEBUG: Price increased on 5m and 15m AND Open Interest increased on 5m and 15m simultaneously.")
 
 
         if oi_increasing:
