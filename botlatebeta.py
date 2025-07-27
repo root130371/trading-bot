@@ -24,7 +24,7 @@ from collections import deque
 #the time comes to close a position it sets it below the current price, but if this is the max area and price jimps back and the group setting
 # proceeds to group 2 price might bounce back and cause a loss showing instability and this has happened 2 times, monitor further logging actions.
 
-#slow internet fix
+#slow internet fix for turkey
 def get_server_time_offset():
     res = requests.get('https://api.bybit.com/v5/market/time')
     res.raise_for_status()
