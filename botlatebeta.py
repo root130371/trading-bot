@@ -420,9 +420,20 @@ def trade():
         else:
             price_up = False
             price_down = False
+        #Safe check for if not none error
+        if (
+            oi_5m_now is not None and
+            oi_15m_now is not None and
+            prev_oi_5m is not None and
+            prev_oi_15m is not None
+        ):
+            oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
+            oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
+        else:
+            oi_increasing = False
+            oi_decreasing = False
         
-        
-        # --- ADD DEBUG LOG HERE ---
+        # --- ADD DEBUG LOG HERE ----
         if price_up and oi_increasing:
             logging.info("DEBUG: Price increased on 5m and 15m AND Open Interest increased on 5m and 15m simultaneously.")
 
