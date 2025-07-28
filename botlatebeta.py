@@ -163,14 +163,14 @@ def check_trend(df):
         return "🔍 NEUTRAL / CONSOLIDATING - Market is neutral or consolidating.", "no_trade"
 
 # Check if price is clearly above or below all EMAs without touching
-def price_cleared_emas(df, buffer = 0.0015):
+def price_cleared_emas(df, buffer = 0.0010):
     last = df.iloc[-1]
     close_price = last['close']
     ema50 = last['EMA50']
     ema100 = last['EMA100']
     ema200 = last['EMA200']
 
-    buffer = 0.0015  # 0.1% buffer to avoid touching
+    buffer = 0.0010  # 0.1% buffer to avoid touching
 
     if close_price > max(ema50, ema100, ema200) * (1 + buffer):
         return "long_clear"
@@ -399,7 +399,7 @@ def trade():
 
         df = calculate_emas(df)
         trend_text, ema_condition = check_trend(df)
-        cleared_condition = price_cleared_emas(df, buffer=0.0015)
+        cleared_condition = price_cleared_emas(df, buffer=0.0010)
         current_price = df['close'].iloc[-1]
 
         
@@ -461,7 +461,7 @@ def trade():
         ema50 = df['EMA50'].iloc[-1]
         ema100 = df['EMA100'].iloc[-1]
         ema200 = df['EMA200'].iloc[-1]
-        buffer = 0.0015
+        buffer = 0.0010
         #pricecheck if its too close to the emas
         close_to_ema50 = abs(price - ema50) / ema50 < buffer
         close_to_ema100 = abs(price - ema100) / ema100 < buffer
