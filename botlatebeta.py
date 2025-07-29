@@ -163,14 +163,14 @@ def check_trend(df):
         return "🔍 NEUTRAL / CONSOLIDATING - Market is neutral or consolidating.", "no_trade"
 
 # Check if price is clearly above or below all EMAs without touching
-def price_cleared_emas(df, buffer = 0.0010):
+def price_cleared_emas(df, buffer = 0.0000):
     last = df.iloc[-1]
     close_price = last['close']
     ema50 = last['EMA50']
     ema100 = last['EMA100']
     ema200 = last['EMA200']
 
-    buffer = 0.0010  # 0.1% buffer to avoid touching
+    buffer = 0.0000  # 0.1% buffer to avoid touching
 
     if close_price > max(ema50, ema100, ema200) * (1 + buffer):
         return "long_clear"
@@ -377,13 +377,18 @@ def trade():
         oi_5m_now, _ = fetch_open_interest(SYMBOL, interval='5min')
         oi_15m_now, _ = fetch_open_interest(SYMBOL, interval='15min')
 
-        if prev_oi_5m is not None and prev_oi_15m is not None:
+        if (
+            oi_5m_now is not None and
+            oi_15m_now is not None and
+            prev_oi_5m is not None and
+            prev_oi_15m is not None
+        ):
             oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
             oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
         else:
             oi_increasing = False
             oi_decreasing = False
-        
+            logging.warning("One or more OI values are None — skipping OI comparison.")
         
 
         # Update previous OI values for next loop##
@@ -399,7 +404,7 @@ def trade():
 
         df = calculate_emas(df)
         trend_text, ema_condition = check_trend(df)
-        cleared_condition = price_cleared_emas(df, buffer=0.0010)
+        cleared_condition = price_cleared_emas(df, buffer=0.0000)
         current_price = df['close'].iloc[-1]
 
         
@@ -461,7 +466,7 @@ def trade():
         ema50 = df['EMA50'].iloc[-1]
         ema100 = df['EMA100'].iloc[-1]
         ema200 = df['EMA200'].iloc[-1]
-        buffer = 0.0010
+        buffer = 0.0000
         #pricecheck if its too close to the emas
         close_to_ema50 = abs(price - ema50) / ema50 < buffer
         close_to_ema100 = abs(price - ema100) / ema100 < buffer
