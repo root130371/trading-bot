@@ -23,6 +23,10 @@ from collections import deque
 #Only 2 questions remain: Remove RSI take profit and use RSI for stop loss, 2., The ATR tp profit isnt set at trade executing but when
 #the time comes to close a position it sets it below the current price, but if this is the max area and price jimps back and the group setting
 # proceeds to group 2 price might bounce back and cause a loss showing instability and this has happened 2 times, monitor further logging actions.
+DEBUG_MODE = True  # Set to False to disable debug logs
+def debug_log(message):
+    if DEBUG_MODE:
+        print(f"[DEBUG] {message}")
 
 #slow internet fix for turkey
 def get_server_time_offset():
@@ -63,7 +67,7 @@ exchange = ccxt.bybit({
 
 # Leverage setting
 LEVERAGE = 50
-USDT_TRADE_AMOUNT = 55  # Amount of USDT to use per trade
+USDT_TRADE_AMOUNT = 20  # Amount of USDT to use per trade
 TP_ATR_MULTIPLIER = 1.5
 
 # Set leverage for the trading symbol
@@ -214,12 +218,14 @@ tp_order_id = None
 # Fetch open interest
 def fetch_open_interest(symbol, interval='5min'):
     try:
-        market_id = exchange.market(symbol)['id']
+        market_id = symbol.replace("/", "").replace(":USDT", "")
+        debug_log(f"Fetching OI for: {market_id} at {interval}")
         response = exchange.public_get_v5_market_open_interest({
             'category': 'linear',
             'symbol': market_id,
             'intervalTime': interval
         })
+        ##debug_log(f"OI response: {response}")
         result_list = response['result']['list']
         if not result_list:
             logging.warning(f"No open interest data returned for {interval}.")
@@ -377,28 +383,26 @@ def trade():
         oi_5m_now, _ = fetch_open_interest(SYMBOL, interval='5min')
         oi_15m_now, _ = fetch_open_interest(SYMBOL, interval='15min')
 
-        if (
-            oi_5m_now is not None and
-            oi_15m_now is not None and
-            prev_oi_5m is not None and
-            prev_oi_15m is not None
-        ):
-            oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
-            oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
-        else:
-            oi_increasing = False
-            oi_decreasing = False
-            logging.warning("One or more OI values are None — skipping OI comparison.")
-        
-
-        # Update previous OI values for next loop##
-        prev_oi_5m = oi_5m_now
-        prev_oi_15m = oi_15m_now
-
+        # === Validate fetched values ===
         if oi_5m_now is None or oi_15m_now is None:
             logging.warning("Open interest fetch returned None, skipping iteration.")
             time.sleep(60)
             continue
+        # === Compare with previous values if available ===
+        if prev_oi_5m is not None and prev_oi_15m is not None:
+            oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
+            oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
+
+            debug_log(f"[DEBUG] OI 5m: {oi_5m_now}, Prev 5m: {prev_oi_5m} | OI 15m: {oi_15m_now}, Prev 15m: {prev_oi_15m}")
+            debug_log(f"[DEBUG] OI Increasing: {oi_increasing}, OI Decreasing: {oi_decreasing}")
+        else:
+            debug_log("[DEBUG] First iteration or missing previous OI — skipping OI trend detection.")
+            oi_increasing = False
+            oi_decreasing = False
+        # === Update previous OI values for next loop ===
+        prev_oi_5m = oi_5m_now
+        prev_oi_15m = oi_15m_now
+
         
 
 
@@ -418,10 +422,11 @@ def trade():
 
         # Fetch close prices for last 2 bars of 5m and 15m
         close_5m = fetch_close_prices(SYMBOL, '5m', limit=2)
-        close_15m = fetch_close_prices(SYMBOL, '15m', limit=2)
-        if close_5m and close_15m:
-            price_up = close_5m[-1] > close_5m[-2] and close_15m[-1] > close_15m[-2]
-            price_down = close_5m[-1] < close_5m[-2] and close_15m[-1] < close_15m[-2]
+        if close_5m and len(close_5m) == 2:
+            price_up = close_5m[-1] > close_5m[-2]
+            price_down = close_5m[-1] < close_5m[-2]
+            debug_log(f"5m Close Prices: {close_5m}")
+            debug_log(f"Price Up: {price_up}, Price Down: {price_down}")
         else:
             price_up = False
             price_down = False
@@ -434,13 +439,15 @@ def trade():
         ):
             oi_increasing = (oi_5m_now > prev_oi_5m) and (oi_15m_now > prev_oi_15m)
             oi_decreasing = (oi_5m_now < prev_oi_5m) and (oi_15m_now < prev_oi_15m)
+            debug_log(f"OI 5m: {oi_5m_now}, OI 15m: {oi_15m_now}, OI Increasing: {oi_increasing}")
+
         else:
             oi_increasing = False
             oi_decreasing = False
-        
+            debug_log(f"oi_5m_now: {oi_5m_now}, oi_15m_now: {oi_15m_now}")
         # --- ADD DEBUG LOG HERE ----
         if price_up and oi_increasing:
-            logging.info("DEBUG: Price increased on 5m and 15m AND Open Interest increased on 5m and 15m simultaneously.")
+            logging.info("DEBUG: Price increased on 5m and oi.")
 
 
         if oi_increasing:
