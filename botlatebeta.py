@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import logging
 from collections import deque
+from datetime import datetime
 #doesgitwork
 
 #CurrentTestingModule
@@ -26,7 +27,8 @@ from collections import deque
 DEBUG_MODE = True  # Set to False to disable debug logs
 def debug_log(message):
     if DEBUG_MODE:
-        print(f"[DEBUG] {message}")
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{now}] [DEBUG] {message}")
 
 #slow internet fix for turkey
 def get_server_time_offset():
