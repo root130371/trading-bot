@@ -24,7 +24,7 @@ from datetime import datetime
 #Only 2 questions remain: Remove RSI take profit and use RSI for stop loss, 2., The ATR tp profit isnt set at trade executing but when
 #the time comes to close a position it sets it below the current price, but if this is the max area and price jimps back and the group setting
 # proceeds to group 2 price might bounce back and cause a loss showing instability and this has happened 2 times, monitor further logging actions.
-DEBUG_MODE = True  # Set to False to disable debug logs
+DEBUG_MODE = False  # Set to False to disable debug logs
 def debug_log(message):
     if DEBUG_MODE:
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -423,15 +423,15 @@ def trade():
         atr_value = df['ATR_RMA'].iloc[-1]
 
         # Fetch close prices for last 2 bars of 5m and 15m
-        close_5m = fetch_close_prices(SYMBOL, '5m', limit=2)
-        if close_5m and len(close_5m) == 2:
-            price_up = close_5m[-1] > close_5m[-2]
-            price_down = close_5m[-1] < close_5m[-2]
-            debug_log(f"5m Close Prices: {close_5m}")
-            debug_log(f"Price Up: {price_up}, Price Down: {price_down}")
-        else:
-            price_up = False
-            price_down = False
+        #close_5m = fetch_close_prices(SYMBOL, '5m', limit=2)
+        #if close_5m and len(close_5m) == 2:
+            #price_up = close_5m[-1] > close_5m[-2]
+            #price_down = close_5m[-1] < close_5m[-2]
+            #debug_log(f"5m Close Prices: {close_5m}")
+            #debug_log(f"Price Up: {price_up}, Price Down: {price_down}")
+        #else:
+            #price_up = False
+            #price_down = False
         #Safe check for if not none error
         if (
             oi_5m_now is not None and
@@ -448,7 +448,7 @@ def trade():
             oi_decreasing = False
             debug_log(f"oi_5m_now: {oi_5m_now}, oi_15m_now: {oi_15m_now}")
         # --- ADD DEBUG LOG HERE ----
-        if price_up and oi_increasing:
+        #if price_up and oi_increasing:
             logging.info("DEBUG: Price increased on 5m and oi.")
 
 
@@ -526,7 +526,7 @@ def trade():
                 #time.sleep(60)
                 #continue
 
-            if ema_condition == 'long' and cleared_condition == 'long_clear' and oi_increasing and price_up:
+            if ema_condition == 'long' and cleared_condition == 'long_clear' and oi_increasing: #price_up
                 if rsi_value >= 70:
                     logging.info(f"RSI too high for entry: {rsi_value:.2f}. Skipping Trade.")
                     time.sleep(60)
@@ -584,7 +584,7 @@ def trade():
             
             
             
-            elif ema_condition == 'short' and cleared_condition == 'short_clear' and oi_increasing and price_down:
+            elif ema_condition == 'short' and cleared_condition == 'short_clear' and oi_increasing: #price_down
                 if rsi_value <= 30:
                     logging.info(f"RSI too low for entry: {rsi_value:.2f}.Skipping Trade")
                     time.sleep(60)
@@ -653,7 +653,7 @@ def trade():
 
             
             if ema_reversal:
-                reason = "EMA reversal against position with price under or overPrice: {current_price:.2f}, EMA50: {ema50:.2f}, EMA100: {ema100:.2f}, EMA200: {df['EMA200'].iloc[-1]:.2f}"
+                reason = f"EMA reversal against position with price under or overPrice: {current_price:.2f}, EMA50: {ema50:.2f}, EMA100: {ema100:.2f}, EMA200: {df['EMA200'].iloc[-1]:.2f}"
             elif atr_tp:
                 reason = f"ATR×{TP_ATR_MULTIPLIER} TP hit at {current_price:.2f} (target {take_profit_price:.2f})"
             elif position == 'long':
