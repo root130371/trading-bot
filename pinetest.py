@@ -49,7 +49,7 @@ market = exchange.market(SYMBOL)
 
 # Leverage setting
 LEVERAGE = 50
-TRADE_USDT = 20  # Amount of USDT to use per trade
+TRADE_USDT = 5  # Amount of USDT to use per trade
 ATR_MULTIPLIER = 1.5
 
 # Set leverage for the trading symbol
@@ -77,12 +77,17 @@ def check_api_connection():
     except Exception as e:
         logging.error(f"API connection failed: {e}")
         return False
+#Global Variables
+in_position = False              # Tracks whether a trade is open
+tp_triggered = False             # Prevents TP from triggering multiple times
+is_trading = False               # Prevents duplicate trade() calls
+current_position_size = 0.0      # Stores current position size locally
 
 # Helper indicator functions
 def ema(series, length):
     return series.ewm(span=length, adjust=False).mean()
 
-def rsi(series, period=14):
+def calculate_rsi(series, period=14):
     delta = series.diff()
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
@@ -99,10 +104,18 @@ def atr(df, period=14):
     return tr.rolling(period).mean()
 
 def fetch_ohlcv(symbol, timeframe, limit=100):
-    data = exchange.fetch_ohlcv(symbol, timeframe, limit)
+    since = exchange.milliseconds() - (limit * 60 * 1000)  # 1m candles
+    data = exchange.fetch_ohlcv(
+        symbol,
+        timeframe,
+        since=since,
+        limit=limit,
+        params={"category": "linear"}  # required for v5
+    )
     df = pd.DataFrame(data, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     return df
+
 
 def calculate_order_quantity(current_price, usdt_amount, leverage, precision, min_qty):
     qty = (usdt_amount * leverage) / current_price
@@ -110,14 +123,30 @@ def calculate_order_quantity(current_price, usdt_amount, leverage, precision, mi
     return max(qty, min_qty)
 
 
-def get_open_position():
-    positions = exchange.private_linear_get_position_list()['result']['list']
-    for pos in positions:
-        if pos['symbol'] == SYMBOL.replace(':', ''):
-            size = float(pos['size'])
-            side = 'long' if size > 0 else 'short' if size < 0 else None
-            return {'size': size, 'side': side}
-    return {'size': 0, 'side': None}
+def get_open_position(symbol=SYMBOL, retries=3, delay=1):
+    for attempt in range(1, retries + 1):
+        try:
+            positions = exchange.fetch_positions()
+            for p in positions:
+                # Check symbol match and that there is a non-zero size
+                contracts = float(p.get('contracts', 0) or 0)
+                size = float(p.get('size', 0) or 0)
+
+                if p['symbol'] == symbol and (contracts > 0 or size > 0):
+                    logging.info(f"✅ Open position found: {p}")
+                    return p
+
+        except Exception as e:
+            logging.error(f"[Attempt {attempt}/{retries}] Error fetching open positions: {e}")
+
+        time.sleep(delay)
+
+    logging.warning("❌ No open position found after retries.")
+    return None
+
+
+
+
 
 def fetch_last_price(symbol):
     # Fetch the latest ticker price from exchange
@@ -127,23 +156,39 @@ def fetch_last_price(symbol):
 
 
 
-def place_limit_order(side, amount, price, post_only=False, reduce_only=False):
-    params = {}
-    if post_only:
-        params['postOnly'] = True
-    if reduce_only:
-        params['reduceOnly'] = True
+def place_limit_order(side, amount, price, post_only=True, reduce_only=False):
     try:
-        order = exchange.create_limit_order(SYMBOL, side, amount, price, params)
-        print(f"{datetime.now()} - LIMIT {side.upper()} order placed: {order}")
-        return order
+        params = {
+            'reduceOnly': reduce_only,
+            'postOnly': post_only
+        }
+        order = exchange.create_limit_order(
+            symbol=SYMBOL,
+            side=side,
+            amount=amount,
+            price=price,
+            params=params
+        )
+        logging.info(f"Limit {side.upper()} order placed: Side={side}, Amount={amount}, Price={price}, ReduceOnly={reduce_only}")
+        return {
+            'id': order['id'],
+            side: side,
+            'amount': amount,
+            'price': price,
+            reduce_only: reduce_only,
+            'raw': order
+        }
+        
     except Exception as e:
         print(f"Order error: {e}")
         return None
 def get_order_status(order_id):
     try:
-        order = exchange.fetch_order(order_id, SYMBOL)
-        return order['status']  # 'open', 'closed', 'canceled', etc.
+        open_orders = exchange.fetch_open_orders(SYMBOL)
+        for order in open_orders:
+            if order['id'] == order_id:
+                return order['status']  # still open
+        return 'closed'  # Not in open orders → assume filled or canceled
     except Exception as e:
         print(f"Fetch order status error: {e}")
         return None
@@ -169,7 +214,7 @@ def place_stop_loss_limit(side, qty, stop_price):
     return order
 
 
-def retry_limit_order(side, qty, price_func, max_retries=10, max_cycles=3, wait_sec=10, post_only=False, reduce_only=False):
+def retry_limit_order(side, qty, price_func, max_retries=10, max_cycles=3, wait_sec=60, post_only=False, reduce_only=False):
     """
     Retry placing limit order up to max_retries times per cycle, max_cycles cycles.
     price_func is a function that returns current limit price for order.
@@ -232,8 +277,26 @@ def close_position(side, amount):
 def main():
     set_leverage(SYMBOL, LEVERAGE)
     position = get_open_position()
-    position_side = position['side']
-    position_size = abs(position['size'])
+    logging.info(f"DEBUG: position returned: {position} (type: {type(position)})")
+    if position is None:
+        logging.info("No open position found.")
+        position_side = None
+        position_size = 0
+        entry_price = None
+    else:
+        # safe access using get()
+        position_side = position.get('side')
+        position_size = abs(position.get('size', 0))
+        entry_price = position.get('entryPrice')
+
+
+    # You can now use position_side, position_size, and entry_price safely
+
+
+
+
+
+    entry_order = None
     take_profit_price = None
     entry_order = None
     tp_order = None
@@ -241,10 +304,26 @@ def main():
 
     while True:
         try:
+            #start variables
+            rsi = None
+            atr_val = None
             # Fetch data
             df_1m = fetch_ohlcv(SYMBOL, '1m')
+            if df_1m.empty:
+                logging.warning("1m OHLCV data is empty, skipping iteration.")
+                time.sleep(60)
+                continue
             df_5m = fetch_ohlcv(SYMBOL, '5m')
+            if df_5m.empty:
+                logging.warning("5m OHLCV data is empty, skipping iteration.")
+                time.sleep(60)
+                continue
             df_1h = fetch_ohlcv(SYMBOL, '1h')
+            if df_1h.empty:
+                logging.warning("1h OHLCV data is empty, skipping iteration.")
+                time.sleep(60)
+                continue
+
 
             # Calculate indicators
             for df in [df_1m, df_5m, df_1h]:
@@ -252,8 +331,17 @@ def main():
                 df['ema_mid'] = ema(df['close'], 50)
                 df['ema_slow'] = ema(df['close'], 100)
 
-            df_1m['rsi'] = rsi(df_1m['close'])
+            df_1m['rsi'] = calculate_rsi(df_1m['close'])
             df_1m['atr'] = atr(df_1m)
+
+            atr_val = df_1m['atr'].iloc[-1]  # get the latest ATR value
+
+            if pd.isna(atr_val):
+                logging.warning("ATR value is NaN, skipping this iteration")
+                time.sleep(60)
+                continue
+
+
 
             # Latest bars
             last_1m = df_1m.iloc[-1]
@@ -281,34 +369,73 @@ def main():
             price_above_emas = last_1m['close'] > last_1m['ema_fast'] and last_1m['close'] > last_1m['ema_mid'] and last_1m['close'] > last_1m['ema_slow']
             price_below_emas = last_1m['close'] < last_1m['ema_fast'] and last_1m['close'] < last_1m['ema_mid'] and last_1m['close'] < last_1m['ema_slow']
 
-            rsi = last_1m['rsi']
-            atr = last_1m['atr']
-
-            # Update position info
-            position = get_open_position()
-            position_side = position['side']
-            position_size = abs(position['size'])
+            rsi_val = last_1m['rsi']
+            atr_val = last_1m['atr']
 
             if entry_order:
                 status = get_order_status(entry_order['id'])
                 if status == 'closed':  # Entry filled
                     print(f"Entry order filled: {entry_order['id']}")
-                    entry_order = None
+                    
+                    
+                    
+                    
+                    for attempt in range(10):  # Retry up to 5 times
+                        position = get_open_position()
+                        print(f"Attempt {attempt+1}: position = {position}")
+                        if position:
+                            break
+                        time.sleep(3)  # Wait 1 second between retries
+
+                    if not position:
+                        print("⚠️ Entry filled but no open position detected. Possibly closed by TP. Skipping TP placement.")
+                        entry_order = None  # Clear entry order so we don’t loop forever
+                        continue  # Go to next loop iteration
                     # Place TP limit order
-                    if position_side == 'long':
-                        tp_price = last_1m['close'] + atr * ATR_MULTIPLIER
-                        qty = position_size
-                        tp_order = place_limit_order('sell', qty, tp_price, reduce_only=True)
-                        take_profit_price = tp_price
-                    elif position_side == 'short':
-                        tp_price = last_1m['close'] - atr * ATR_MULTIPLIER
-                        qty = position_size
-                        tp_order = place_limit_order('buy', qty, tp_price)
-                        take_profit_price = tp_price
+                    position = get_open_position()
+                    if position:
+                        position_side = position.get('side')
+                        position_size = abs(position.get('size', 0))
+                        entry_price = position.get('entryPrice')
+                        if position_side == 'long':
+                            tp_price = float(entry_price) + atr_val * ATR_MULTIPLIER
+                            tp_order = place_limit_order('sell', position_size, tp_price, reduce_only=True)
+                            take_profit_price = tp_price
+                        elif position_side == 'short':
+                            tp_price = float(entry_price) - atr_val * ATR_MULTIPLIER
+                            tp_order = place_limit_order('buy', position_size, tp_price, reduce_only=True)
+                            take_profit_price = tp_price
+
+                        # Clear entry order once TP is placed
+                        entry_order = None
+                    else:
+                        print("No position found after entry order filled, cannot place TP order")
+                    
 
                 elif status == 'canceled' or status is None:
                     print("Entry order canceled or unknown status, clearing order")
                     entry_order = None
+
+            # Prevent re-entry if entry is in progress
+            if entry_order:
+                logging.info("Waiting for entry order to fill...")
+                time.sleep(5)
+                continue
+
+            
+
+            position = get_open_position()
+            if position is None:
+                position_side = None
+                position_size = 0
+                entry_price = None
+            else:
+                position_side = position.get('side')
+                position_size = abs(position.get('size', 0))
+                entry_price = position.get('entryPrice')
+
+
+
             # 2. Check if TP order exists and if filled
             if tp_order:
                 status = get_order_status(tp_order['id'])
@@ -334,7 +461,7 @@ def main():
 
             # 3. Entry logic (only if no open position and no pending entry order)
             if (position_side is None or position_size == 0) and entry_order is None:
-                if long_trend and price_above_emas and rsi < 70 and price_up_5m and price_up_1m:
+                if long_trend and price_above_emas and rsi_val < 70 and price_up_5m and price_up_1m:
                     market = exchange.market(SYMBOL)
                     min_qty = market['limits']['amount']['min']
                     precision = market['precision']['amount']
@@ -353,7 +480,7 @@ def main():
                         entry_price = last_1m['close'] * 0.999
                         entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
 
-                elif short_trend and price_below_emas and rsi > 30 and price_down_5m and price_down_1m:
+                elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
                     market = exchange.market(SYMBOL)
                     min_qty = market['limits']['amount']['min']
                     precision = market['precision']['amount']
@@ -374,7 +501,7 @@ def main():
 
             # Check for exit conditions
             if position_side == 'long':
-                tp_price = take_profit_price or (position_size and last_1m['close'] + atr * ATR_MULTIPLIER)
+                tp_price = take_profit_price or (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
                 if last_1m['close'] >= tp_price:
                     print(f"{datetime.now()} - TP hit, closing LONG")
                     if stop_loss_order:
@@ -386,7 +513,7 @@ def main():
                         take_profit_price = None
                     close_position('long', position_size)
                     take_profit_price = None
-                elif rsi > 70 or not long_trend or not price_above_emas:
+                elif rsi_val > 70 or not long_trend or not price_above_emas:
                     print(f"{datetime.now()} - RSI exit, closing LONG")
                     
                     # Cancel existing TP order if any
@@ -400,12 +527,16 @@ def main():
                         stop_loss_order = None
 
                     # Place stop loss limit order just below current price
-                    stop_loss_price = last_1m['close'] * 0.999
-                    stop_loss_order = place_limit_order('sell', position_size, stop_loss_price, post_only=True, reduce_only=True)
-                
+                    if position_size > 0:
+                        precision = exchange.market(SYMBOL)['precision']['price']
+                        stop_loss_price = round(last_1m['close'] * 0.999, precision)
+                        stop_loss_order = place_limit_order('sell', position_size, stop_loss_price, post_only=True, reduce_only=True)
+                    else:
+                        print("No LONG position size to place stop loss order.")
+
 
             elif position_side == 'short':
-                tp_price = take_profit_price or (position_size and last_1m['close'] - atr * ATR_MULTIPLIER)
+                tp_price = take_profit_price or (position_size and last_1m['close'] - atr_val * ATR_MULTIPLIER)
                 if last_1m['close'] <= tp_price:
                     print(f"{datetime.now()} - TP hit, closing SHORT")
                     if stop_loss_order:
@@ -417,7 +548,7 @@ def main():
                         take_profit_price = None
                     close_position('short', position_size)
                     take_profit_price = None
-                elif rsi < 30 or not short_trend or not price_below_emas:
+                elif rsi_val < 30 or not short_trend or not price_below_emas:
                     print(f"{datetime.now()} - RSI exit, closing SHORT")
                     
 
@@ -431,8 +562,13 @@ def main():
                         stop_loss_order = None
 
                     # Place stop loss limit order just above current price
-                    stop_loss_price = last_1m['close'] * 1.001
-                    stop_loss_order = place_limit_order('buy', position_size, stop_loss_price, post_only=True, reduce_only=True)
+                    if position_size > 0:
+                        precision = exchange.market(SYMBOL)['precision']['price']
+                        stop_loss_price = round(last_1m['close'] * 1.001, precision)
+                        stop_loss_order = place_limit_order('buy', position_size, stop_loss_price, post_only=True, reduce_only=True)
+                    else:
+                        print("No SHORT position size to place stop loss order.")
+
                 elif not short_trend or not price_below_emas:
                     print(f"{datetime.now()} - EMA reversal or price above EMAs, closing SHORT")
                     close_position('short', position_size)
