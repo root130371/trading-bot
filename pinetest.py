@@ -50,7 +50,7 @@ market = exchange.market(SYMBOL)
 
 # Leverage setting
 LEVERAGE = 50
-TRADE_USDT = 5  # Amount of USDT to use per trade
+TRADE_USDT = 20  # Amount of USDT to use per trade
 ATR_MULTIPLIER = 1.5
 
 # Set leverage for the trading symbol
