@@ -83,6 +83,8 @@ in_position = False              # Tracks whether a trade is open
 tp_triggered = False             # Prevents TP from triggering multiple times
 is_trading = False               # Prevents duplicate trade() calls
 current_position_size = 0.0      # Stores current position size locally
+stop_loss_price = None            # Stores stop loss price locally
+take_profit_price = None                 # Stores take profit price locally
 
 # Helper indicator functions
 def ema(series, length):
@@ -436,13 +438,12 @@ def main():
                             print(f"⚠️ Missing data for TP calculation: entry_price={entry_price}, atr_val={atr_val}")
                         else:
                             if position_side == 'long':
-                                tp_price = float(entry_price) + atr_val * ATR_MULTIPLIER
-                                tp_order = place_limit_order('sell', position_size, tp_price, reduce_only=True)
-                                take_profit_price = tp_price
+                                take_profit_price = float(entry_price) + atr_val * ATR_MULTIPLIER
+                                tp_order = place_limit_order('sell', position_size, take_profit_price, reduce_only=True)
                             elif position_side == 'short':
-                                tp_price = float(entry_price) - atr_val * ATR_MULTIPLIER
-                                tp_order = place_limit_order('buy', position_size, tp_price, reduce_only=True)
-                                take_profit_price = tp_price
+                                take_profit_price = float(entry_price) - atr_val * ATR_MULTIPLIER
+                                tp_order = place_limit_order('buy', position_size, take_profit_price, reduce_only=True)
+                                take_profit_price = take_profit_price
 
                         # Clear entry order once TP is placed
                         entry_order = None
@@ -557,10 +558,11 @@ def main():
             # Check for exit conditions
             # Take Profit Check
             if position_side == 'long':
-                tp_price = take_profit_price or (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
+                if take_profit_price is None and position_size > 0:
+                    take_profit_price = (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
 
             # Take Profit Check
-            if last_1m['close'] >= tp_price:
+            if take_profit_price is not None and last_1m['close'] >= take_profit_price:
                 print(f"{datetime.now()} - TP hit, closing LONG")
                 if stop_loss_order:
                     cancel_order(stop_loss_order['id'])
@@ -598,10 +600,11 @@ def main():
 
 
             if position_side == 'short':
-                tp_price = take_profit_price or (position_size and last_1m['close'] - atr_val * ATR_MULTIPLIER)
+                if take_profit_price is None and position_size > 0:    
+                    take_profit_price = (position_size and last_1m['close'] - atr_val * ATR_MULTIPLIER)
     
                 # Take Profit Check
-                if last_1m['close'] <= tp_price:
+                if take_profit_price is not None and last_1m['close'] <= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing SHORT")
                     if stop_loss_order:
                         cancel_order(stop_loss_order['id'])
