@@ -1,0 +1,27 @@
+timestamp,closing price,EMA,OI condition,RSI
+2025-06-16 15:08:00,2637.85,long,Open interest condition not fulfilled,43.59054963480876
+2025-06-16 15:09:00,2636.31,long,Open interest condition not fulfilled,40.48217807250038
+2025-06-16 15:10:00,2639.41,long,Open interest condition not fulfilled,48.23414217875669
+2025-06-16 15:11:00,2637.23,long,Open interest condition not fulfilled,42.7790046017273
+2025-06-16 15:12:00,2636.38,long,Open interest condition not fulfilled,40.847193408975315
+2025-06-16 15:13:00,2639.97,long,Open interest condition not fulfilled,50.899449398851424
+2025-06-16 15:14:00,2638.7,long,Open interest condition not fulfilled,47.5642153781644
+2025-06-16 15:15:00,2640.36,long,Decrease (5m+15),51.957314391502976
+2025-06-16 15:16:00,2638.76,long,Open interest condition not fulfilled,47.46686144189133
+2025-06-16 15:17:00,2641.92,long,Open interest condition not fulfilled,56.47511163956076
+2025-06-16 15:18:00,2641.84,long,Open interest condition not fulfilled,54.46430833782089
+2025-06-16 15:19:00,2641.93,long,Open interest condition not fulfilled,54.56540192053088
+2025-06-16 15:20:00,2641.11,long,Open interest condition not fulfilled,52.10451867998344
+2025-06-16 15:21:00,2639.9,long,Open interest condition not fulfilled,48.9961384740125
+2025-06-16 15:22:00,2639.78,long,Open interest condition not fulfilled,48.57693002558655
+2025-06-16 15:23:00,2640.89,long,Open interest condition not fulfilled,50.9186527325528
+2025-06-16 15:24:00,2640.38,long,Open interest condition not fulfilled,49.59503787082881
+2025-06-16 15:25:00,2644.56,long,Open interest condition not fulfilled,59.140292073407764
+2025-06-16 15:26:00,2639.8,long,Open interest condition not fulfilled,47.646585688981276
+2025-06-16 15:27:00,2638.9,long,Open interest condition not fulfilled,45.751529179952364
+2025-06-16 15:28:00,2635.98,long,Open interest condition not fulfilled,41.38489214819768
+2025-06-16 15:29:00,2636.93,long,Open interest condition not fulfilled,43.70615750028312
+2025-06-16 15:30:00,2637.37,long,Increase (5m+15m),44.97744556765464
+2025-06-16 15:31:00,2642.34,long,Open interest condition not fulfilled,55.00290619287399
+2025-06-16 15:32:00,2640.91,long,Open interest condition not fulfilled,52.081142977424626
+2025-06-16 15:33:00,2636.21,long,Open interest condition not fulfilled,43.22488323046246

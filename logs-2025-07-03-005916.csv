@@ -1,0 +1,14 @@
+timestamp,closing price,EMA,OI condition,RSI
+2025-07-02 16:59:00,2560.93,long,Open interest condition not fulfilled,66.61372326057688
+2025-07-02 17:00:00,2566.19,long,Increase (5m+15m),71.19755158411823
+2025-07-02 17:01:00,2563.74,long,Open interest condition not fulfilled,67.82881213953328
+2025-07-02 17:02:00,2566.47,long,Open interest condition not fulfilled,70.60226792236946
+2025-07-02 17:03:00,2565.01,long,Open interest condition not fulfilled,68.2534385316866
+2025-07-02 17:04:00,2564.28,long,Open interest condition not fulfilled,66.76532973085244
+2025-07-02 17:05:00,2564.8,long,Open interest condition not fulfilled,67.3051314141645
+2025-07-02 17:06:00,2561.75,long,Open interest condition not fulfilled,61.07789771299579
+2025-07-02 17:07:00,2560.2,long,Open interest condition not fulfilled,57.67125489180299
+2025-07-02 17:08:00,2563.99,long,Open interest condition not fulfilled,62.182560593633674
+2025-07-02 17:09:00,2564.99,long,Open interest condition not fulfilled,63.38600012187946
+2025-07-02 17:10:00,2563.7,long,Open interest condition not fulfilled,61.86723231999038
+2025-07-02 17:11:00,2563.47,long,Open interest condition not fulfilled,60.579224423019774
