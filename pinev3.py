@@ -225,7 +225,7 @@ def place_stop_loss_limit(side, qty, stop_price):
         opposite = 'sell' if side == 'long' else 'buy'
         order = exchange.create_order(
             symbol=SYMBOL,
-            type='stop_market',   # stop-market guarantees execution
+            type='limit',   # stop-market guarantees execution
             side=opposite,
             amount=qty,
             price=None,           # no limit price, market execution
@@ -476,9 +476,14 @@ def main():
             position = get_open_position()
 
             if position:
-                logging.info(f"⏸ Already in a {position['side']} position, size={position['size']}. Skipping entry.")
-                time.sleep(60)
-                continue
+                position_side = position.get('side')
+                position_size = abs(position.get('size', position.get('contracts', 0)))
+                entry_price = position.get('entryPrice')
+                logging.info(f"✅ In a {position_side} position, size={position_size}. Checking exit logic...")
+            else:
+                position_side = None
+                position_size = 0
+                entry_price = None
 
 
 
@@ -557,7 +562,7 @@ def main():
 
             # Check for exit conditions
             # Take Profit Check
-            if position_side == 'long':
+            if position is not None and position_side == 'long':
                 if take_profit_price is None and position_size > 0:
                     take_profit_price = (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
 
@@ -588,14 +593,28 @@ def main():
                 if stop_loss_order:
                     cancel_order(stop_loss_order['id'])
                     stop_loss_order = None
+                # Cancel *all* open orders (to avoid duplicates hanging on Bybit)
+                open_orders = exchange.fetch_open_orders(SYMBOL)
+                for o in open_orders:
+                    try:
+                        cancel_order(o['id'])
+                    except Exception as e:
+                        print(f"Error cancelling order {o['id']}: {e}")
+                stop_loss_order = None
 
                 # Place stop loss limit order just below current price
-                if position and position['side'] == 'long' and position['size'] > 0:
-                    stop_loss_price = round(last_1m['close'] * 0.999, 2)  # e.g. 0.1% below
-                    stop_loss_order = place_stop_loss_limit('long', position_size, stop_loss_price)
-                    print(f"Placed STOP LOSS LIMIT order at {stop_loss_price}")
+                if position is not None:
+                    side = position.get("side")
+                    size = float(position.get("size", 0))  # or "contracts" depending on your API
+
+                    if side == "long" and size > 0:
+                        stop_loss_price = round(last_1m['close'] * 0.999, 2)
+                        stop_loss_order = place_stop_loss_limit('long', size, stop_loss_price)
+                        print(f"Placed STOP LOSS LIMIT order at {stop_loss_price}")
                 else:
-                    print("No LONG position size to place stop loss order.")
+                    # No position at all → skip stop loss logic completely
+                    pass
+
 
 
 
@@ -629,13 +648,24 @@ def main():
                     if stop_loss_order:
                         cancel_order(stop_loss_order['id'])
                         stop_loss_order = None
+                    open_orders = exchange.fetch_open_orders(SYMBOL)
+                    for o in open_orders:
+                        try:
+                            cancel_order(o['id'])
+                        except Exception as e:
+                            print(f"Error cancelling order {o['id']}: {e}")
                     # Place stop loss limit order just above current price
-                    if position and position['side'] == 'short' and position['size'] > 0:
-                        stop_loss_price = round(last_1m['close'] * 1.001, 2)  # e.g. 0.1% above
-                        stop_loss_order = place_stop_loss_limit('short', position_size, stop_loss_price)
-                        print(f"Stop loss placed at {stop_loss_price} for SHORT position")
+                    if position is not None:
+                        side = position.get("side")
+                        size = float(position.get("size", 0))  # or "contracts" depending on your API
+
+                        if side == "short" and size > 0:
+                            stop_loss_price = round(last_1m['close'] * 1.001, 2)
+                            stop_loss_order = place_stop_loss_limit('short', size, stop_loss_price)
+                            print(f"Placed STOP LOSS LIMIT order at {stop_loss_price}")
                     else:
-                        print("No SHORT position size to place stop loss order.")
+                        pass
+
         
 
 
