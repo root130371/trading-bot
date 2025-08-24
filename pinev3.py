@@ -85,19 +85,29 @@ is_trading = False               # Prevents duplicate trade() calls
 current_position_size = 0.0      # Stores current position size locally
 stop_loss_price = None            # Stores stop loss price locally
 take_profit_price = None                 # Stores take profit price locally
-
+# ATR Settings
+ATR_PERIOD = 14
+ATR_STOP_MULTIPLIER = 1.5   # stop loss = entry ± ATR × multiplier
+TIMEFRAME = '1m'  # Main timeframe for signals
 # Helper indicator functions
-def ema(series, length):
-    return series.ewm(span=length, adjust=False).mean()
+def ema(prices, length):
+    return prices.ewm(span=length, adjust=False).mean()
+
 
 def calculate_rsi(series, period=14):
     delta = series.diff()
-    gain = delta.where(delta > 0, 0)
-    loss = -delta.where(delta < 0, 0)
-    avg_gain = gain.rolling(period).mean()
-    avg_loss = loss.rolling(period).mean()
+
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+
+    # Wilder's smoothing = EMA with alpha=1/period
+    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+
     rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+    rsi = 100 - (100 / (1 + rs))
+    return rsi
+
 
 def atr(df, period=14):
     high_low = df['high'] - df['low']
@@ -223,23 +233,35 @@ def get_entry_price_short():
 def place_stop_loss_limit(side, qty, stop_price):
     try:
         opposite = 'sell' if side == 'long' else 'buy'
+
+        # define the actual limit price once the stop triggers
+        if side == 'long':
+            # stop loss triggers BELOW, so set limit slightly below stop
+            limit_price = round(stop_price * 0.9995, 2)
+        else:
+            # stop loss triggers ABOVE, so set limit slightly above stop
+            limit_price = round(stop_price * 1.0005, 2)
+
         order = exchange.create_order(
             symbol=SYMBOL,
-            type='limit',   # stop-market guarantees execution
+            type='limit',      # this is the execution type (stop-limit)
             side=opposite,
             amount=qty,
-            price=None,           # no limit price, market execution
+            price=limit_price, # must include this!
             params={
-                'stopLossPrice': stop_price,   # trigger level
+                'stopLossPrice': stop_price,  # trigger level
                 'reduceOnly': True,
-                'triggerBy': 'MarkPrice'       # safer than LastPrice
+                'triggerBy': 'MarkPrice'
             }
         )
-        print(f"Stop loss placed at {stop_price} for {side.upper()} position")
+
+        print(f"✅ Stop-limit placed: Trigger={stop_price}, Limit={limit_price}, Side={opposite}")
         return order
+
     except Exception as e:
-        print(f"Stop loss error: {e}")
+        print(f"❌ Stop loss error: {e}")
         return None
+
 
 
 
@@ -362,13 +384,16 @@ def main():
 
             df_1m['rsi'] = calculate_rsi(df_1m['close'])
             df_1m['atr'] = atr(df_1m)
+            last_1m = df_1m.iloc[-1]
 
-            atr_val = df_1m['atr'].iloc[-1]  # get the latest ATR value
+            atr_val = last_1m['atr']
+            rsi_val = last_1m['rsi']
 
-            if pd.isna(atr_val):
-                logging.warning("ATR value is NaN, skipping this iteration")
+            if pd.isna(atr_val) or pd.isna(rsi_val):
+                logging.warning(f"Indicators not ready yet (ATR={atr_val}, RSI={rsi_val}), skipping...")
                 time.sleep(60)
                 continue
+
 
 
 
@@ -484,6 +509,26 @@ def main():
                 position_side = None
                 position_size = 0
                 entry_price = None
+            # === ATR Stop Loss ===
+            if position_side and entry_price:
+                # Calculate ATR
+                df = fetch_ohlcv(SYMBOL, timeframe=TIMEFRAME, limit=50)
+                df['ATR'] = atr(df, period=ATR_PERIOD)
+                atr_value = df['ATR'].iloc[-1]
+
+                stop_distance = atr_value * ATR_STOP_MULTIPLIER
+
+                if position_side.lower() == "long":
+                    atr_stop = entry_price - stop_distance
+                elif position_side.lower() == "short":
+                    atr_stop = entry_price + stop_distance
+                else:
+                    atr_stop = None
+
+                if atr_stop:
+                    logging.info(f"📉 ATR Stop Loss for {position_side}: {atr_stop:.2f}")
+                    place_stop_loss_limit(position_side, position_size, atr_stop)
+
 
 
 
@@ -562,58 +607,116 @@ def main():
 
             # Check for exit conditions
             # Take Profit Check
-            if position is not None and position_side == 'long':
-                if take_profit_price is None and position_size > 0:
+            if position_side == 'long':
+                if take_profit_price is None and position_size > 0:    
                     take_profit_price = (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
 
-            # Take Profit Check
-            if take_profit_price is not None and last_1m['close'] >= take_profit_price:
-                print(f"{datetime.now()} - TP hit, closing LONG")
-                if stop_loss_order:
-                    cancel_order(stop_loss_order['id'])
-                    stop_loss_order = None
-                if tp_order:
-                    cancel_order(tp_order['id'])
-                    tp_order = None
-                close_position('long', position_size)
-                take_profit_price = None
-
-            # RSI Exit (overbought) OR EMA Exit (trend reversal)
-            if rsi_val > 70 or (not long_trend or not price_above_emas):
-                reason = "RSI exit" if rsi_val > 70 else "EMA exit"
-                print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for LONG")
-
-                # Cancel existing TP order if any
-                if tp_order:
-                    cancel_order(tp_order['id'])
-                    tp_order = None
+                # Take Profit Check
+                if take_profit_price is not None and last_1m['close'] >= take_profit_price:
+                    print(f"{datetime.now()} - TP hit, closing LONG")
+                    if stop_loss_order:
+                        try:
+                            cancel_order(stop_loss_order['id'])
+                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling SL: {e}")
+                        stop_loss_order = None
+                    if tp_order:
+                        try:
+                            cancel_order(tp_order['id'])
+                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling TP: {e}")
+                        tp_order = None
+                    close_position('long', position_size)
                     take_profit_price = None
 
-                # Cancel SL as well before placing new one
-                if stop_loss_order:
-                    cancel_order(stop_loss_order['id'])
-                    stop_loss_order = None
-                # Cancel *all* open orders (to avoid duplicates hanging on Bybit)
-                open_orders = exchange.fetch_open_orders(SYMBOL)
-                for o in open_orders:
-                    try:
-                        cancel_order(o['id'])
-                    except Exception as e:
-                        print(f"Error cancelling order {o['id']}: {e}")
-                stop_loss_order = None
+                # RSI Exit (overbought) or EMA Exit (trend reversal)
+                if rsi_val > 70:
+                    reason = "RSI exit" if rsi_val > 70 else "EMA exit"
+                    print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for LONG")
+                    # Cancel both TP and SL before placing fresh
+                    if tp_order:
+                        try:
+                            cancel_order(tp_order['id'])
+                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling TP: {e}")
+                        tp_order = None
 
-                # Place stop loss limit order just below current price
-                if position is not None:
-                    side = position.get("side")
-                    size = float(position.get("size", 0))  # or "contracts" depending on your API
+                    if stop_loss_order:
+                        try:
+                            cancel_order(stop_loss_order['id'])
+                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling SL: {e}")
+                        stop_loss_order = None
 
-                    if side == "long" and size > 0:
-                        stop_loss_price = round(last_1m['close'] * 0.999, 2)
-                        stop_loss_order = place_stop_loss_limit('long', size, stop_loss_price)
-                        print(f"Placed STOP LOSS LIMIT order at {stop_loss_price}")
+                    # Place fresh SL after RSI exit
+                    close_position('long', position_size)
+
+                # EMA Exit (trend reversal)
+                elif not long_trend or not price_above_emas:
+                    print(f"{datetime.now()} - EMA exit, refreshing SL")
+                    if tp_order:
+                        try:
+                            cancel_order(tp_order['id'])
+                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling TP: {e}")
+                        tp_order = None
+
+                    if stop_loss_order:
+                        try:
+                            cancel_order(stop_loss_order['id'])
+                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling SL: {e}")
+                        stop_loss_order = None
+
+                    # Place fresh SL after EMA exit
+                    close_position('long', position_size)
                 else:
-                    # No position at all → skip stop loss logic completely
-                    pass
+                    # Neither RSI nor EMA triggered
+                    print(f"{datetime.now()} - Holding LONG (RSI={rsi_val}, Trend={long_trend}, PriceAboveEMAs={price_above_emas})")
+
+                # Guard for SL
+                if (position is not None and position_size > 0 
+                    and entry_price is not None 
+                    and atr_val is not None and not pd.isna(atr_val)):
+                    # Continuous ATR stop loss independent of EMA/RSI
+                    atr_sl_price = round(entry_price - atr_val * ATR_STOP_MULTIPLIER, 2)
+
+                    # If price goes below ATR SL → exit immediately
+                    if last_1m['close'] <= atr_sl_price:
+                        print(f"{datetime.now()} - ATR STOP LOSS hit, closing LONG at {atr_sl_price}")
+
+                        # Cancel TP + SL before placing fresh
+                        if tp_order:
+                            try:
+                                cancel_order(tp_order['id'])
+                                print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                            except Exception as e:
+                                print(f"Error cancelling TP: {e}")
+                            tp_order = None
+
+                        if stop_loss_order:
+                            try:
+                                cancel_order(stop_loss_order['id'])
+                                print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                            except Exception as e:
+                                print(f"Error cancelling SL: {e}")
+                            stop_loss_order = None
+
+                        # Use your existing close_position (LIMIT order)
+                        close_position('long', position_size)
+            else:
+                # No position at all → skip stop loss logic completely
+                pass
+
+               
+
+                
 
 
 
@@ -635,38 +738,89 @@ def main():
                     take_profit_price = None
 
                 # RSI Exit (oversold) or EMA Exit (trend reversal)
-                if rsi_val < 30 or (not short_trend or not price_below_emas):
+                if rsi_val < 30:
                     reason = "RSI exit" if rsi_val < 30 else "EMA exit"
                     print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for SHORT")
-
-                    # Cancel existing TP order if any
+                    # Cancel both TP and SL before placing fresh
                     if tp_order:
-                        cancel_order(tp_order['id'])
-                        tp_order = None
-                        take_profit_price = None
-                    # Cancel SL as well
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                    open_orders = exchange.fetch_open_orders(SYMBOL)
-                    for o in open_orders:
                         try:
-                            cancel_order(o['id'])
+                            cancel_order(tp_order['id'])
+                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
                         except Exception as e:
-                            print(f"Error cancelling order {o['id']}: {e}")
-                    # Place stop loss limit order just above current price
-                    if position is not None:
-                        side = position.get("side")
-                        size = float(position.get("size", 0))  # or "contracts" depending on your API
+                            print(f"Error cancelling TP: {e}")
+                        tp_order = None
 
-                        if side == "short" and size > 0:
-                            stop_loss_price = round(last_1m['close'] * 1.001, 2)
-                            stop_loss_order = place_stop_loss_limit('short', size, stop_loss_price)
-                            print(f"Placed STOP LOSS LIMIT order at {stop_loss_price}")
-                    else:
-                        pass
+                    if stop_loss_order:
+                        try:
+                            cancel_order(stop_loss_order['id'])
+                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling SL: {e}")
+                        stop_loss_order = None
+                     # Place fresh SL after RSI exit
+                    close_position('short', position_size)
 
-        
+                # EMA Exit (trend reversal)
+                elif not short_trend or not price_below_emas:
+                    print(f"{datetime.now()} - EMA exit, refreshing SL")
+                    if tp_order:
+                        try:
+                            cancel_order(tp_order['id'])
+                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling TP: {e}")
+                        tp_order = None
+
+                    if stop_loss_order:
+                        try:
+                            cancel_order(stop_loss_order['id'])
+                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        except Exception as e:
+                            print(f"Error cancelling SL: {e}")
+                        stop_loss_order = None
+
+                    # Place fresh SL after EMA exit
+                    close_position('short', position_size)
+                else:
+                    #neither RSI nor EMA triggered
+                    print(f"{datetime.now()} - Holding SHORT (RSI={rsi_val}, Trend={short_trend}, PriceBelowEMAs={price_below_emas})")
+                #Guard for SL
+                if (position is not None and position_size > 0 
+                    and entry_price is not None 
+                    and atr_val is not None and not pd.isna(atr_val)):
+                # Continuous ATR stop loss independent of EMA/RSI
+                    if (position is not None and position_size > 0 
+                        and entry_price is not None 
+                        and atr_val is not None and not pd.isna(atr_val)):
+
+                        atr_sl_price = round(entry_price + atr_val * ATR_STOP_MULTIPLIER, 2)
+
+                        # If price goes above ATR SL → exit immediately
+                        if last_1m['close'] >= atr_sl_price:
+                            print(f"{datetime.now()} - ATR STOP LOSS hit, closing SHORT at {atr_sl_price}")
+
+                            # Cancel TP + SL before placing fresh
+                            if tp_order:
+                                try:
+                                    cancel_order(tp_order['id'])
+                                    print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                                except Exception as e:
+                                    print(f"Error cancelling TP: {e}")
+                                tp_order = None
+
+                            if stop_loss_order:
+                                try:
+                                    cancel_order(stop_loss_order['id'])
+                                    print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                                except Exception as e:
+                                    print(f"Error cancelling SL: {e}")
+                                stop_loss_order = None
+
+                            # Use your existing close_position (LIMIT order)
+                            close_position('short', position_size)
+                else:
+                    # No position at all → skip stop loss logic completely
+                    pass
 
 
 
