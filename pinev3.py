@@ -51,7 +51,7 @@ market = exchange.market(SYMBOL)
 # Leverage setting
 LEVERAGE = 50
 TRADE_USDT = 20  # Amount of USDT to use per trade
-ATR_MULTIPLIER = 1.5
+ATR_MULTIPLIER = 2
 
 # Set leverage for the trading symbol
 def set_leverage(symbol, leverage):
@@ -87,7 +87,7 @@ stop_loss_price = None            # Stores stop loss price locally
 take_profit_price = None                 # Stores take profit price locally
 # ATR Settings
 ATR_PERIOD = 14
-ATR_STOP_MULTIPLIER = 1.5   # stop loss = entry ± ATR × multiplier
+ATR_STOP_MULTIPLIER = 2   # stop loss = entry ± ATR × multiplier
 TIMEFRAME = '1m'  # Main timeframe for signals
 # Helper indicator functions
 def ema(prices, length):
