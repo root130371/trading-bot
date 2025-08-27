@@ -84,7 +84,8 @@ tp_triggered = False             # Prevents TP from triggering multiple times
 is_trading = False               # Prevents duplicate trade() calls
 current_position_size = 0.0      # Stores current position size locally
 stop_loss_price = None            # Stores stop loss price locally
-take_profit_price = None                 # Stores take profit price locally
+take_profit_price = None  
+          # Stores take profit price locally
 # ATR Settings
 ATR_PERIOD = 14
 ATR_STOP_MULTIPLIER = 2   # stop loss = entry ± ATR × multiplier
@@ -134,6 +135,7 @@ def calculate_order_quantity(current_price, usdt_amount, leverage, precision, mi
     qty = (usdt_amount * leverage) / current_price
     qty = math.floor(qty * (10 ** precision)) / (10 ** precision)
     return max(qty, min_qty)
+
 
 
 
@@ -237,10 +239,10 @@ def place_stop_loss_limit(side, qty, stop_price):
         # define the actual limit price once the stop triggers
         if side == 'long':
             # stop loss triggers BELOW, so set limit slightly below stop
-            limit_price = round(stop_price * 0.9995, 2)
+            limit_price = round(stop_price * 0.999, 2)
         else:
             # stop loss triggers ABOVE, so set limit slightly above stop
-            limit_price = round(stop_price * 1.0005, 2)
+            limit_price = round(stop_price * 1.001, 2)
 
         order = exchange.create_order(
             symbol=SYMBOL,
@@ -322,6 +324,25 @@ def close_position(side, amount):
     except Exception as e:
         print(f"Close position limit order error: {e}")
         return None
+def calculate_adx(df, period=14):
+    df = df.copy()
+    df['TR'] = np.maximum(df['high'] - df['low'],
+                          np.maximum(abs(df['high'] - df['close'].shift()),
+                                     abs(df['low'] - df['close'].shift())))
+    df['+DM'] = np.where((df['high'] - df['high'].shift()) > (df['low'].shift() - df['low']),
+                         np.maximum(df['high'] - df['high'].shift(), 0), 0)
+    df['-DM'] = np.where((df['low'].shift() - df['low']) > (df['high'] - df['high'].shift()),
+                         np.maximum(df['low'].shift() - df['low'], 0), 0)
+
+    df['TR14'] = df['TR'].rolling(period).sum()
+    df['+DM14'] = df['+DM'].rolling(period).sum()
+    df['-DM14'] = df['-DM'].rolling(period).sum()
+
+    df['+DI14'] = 100 * (df['+DM14'] / df['TR14'])
+    df['-DI14'] = 100 * (df['-DM14'] / df['TR14'])
+    df['DX'] = (abs(df['+DI14'] - df['-DI14']) / (df['+DI14'] + df['-DI14'])) * 100
+    df['ADX'] = df['DX'].rolling(period).mean()
+    return df
 
 
 # --- MAIN STRATEGY LOOP ---
@@ -346,12 +367,14 @@ def main():
 
 
 
-
+    #Local Variables
     entry_order = None
     take_profit_price = None
     entry_order = None
     tp_order = None
     stop_loss_order = None
+    tp_set = False
+    sl_set = False
 
     while True:
         try:
@@ -386,11 +409,21 @@ def main():
             df_1m['atr'] = atr(df_1m)
             last_1m = df_1m.iloc[-1]
 
+            df_5m = calculate_adx(df_5m)
+            adx_val = df_5m['ADX'].iloc[-1]
+
+
+
             atr_val = last_1m['atr']
             rsi_val = last_1m['rsi']
 
             if pd.isna(atr_val) or pd.isna(rsi_val):
                 logging.warning(f"Indicators not ready yet (ATR={atr_val}, RSI={rsi_val}), skipping...")
+                time.sleep(60)
+                continue
+            
+            if pd.isna(adx_val):
+                logging.info("ADX not ready yet, skipping iteration.")
                 time.sleep(60)
                 continue
 
@@ -527,7 +560,6 @@ def main():
 
                 if atr_stop:
                     logging.info(f"📉 ATR Stop Loss for {position_side}: {atr_stop:.2f}")
-                    place_stop_loss_limit(position_side, position_size, atr_stop)
 
 
 
@@ -567,149 +599,147 @@ def main():
 
             # 3. Entry logic (only if no open position and no pending entry order)
             if (position_side is None or position_size == 0) and entry_order is None:
-                if long_trend and price_above_emas and rsi_val < 70 and price_up_5m and price_up_1m:
-                    market = exchange.market(SYMBOL)
-                    min_qty = market['limits']['amount']['min']
-                    precision = int(market['precision']['amount'])
-                    qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
-                    # Cancel any existing SL and TP orders before placing new entry
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                    if tp_order:
-                        cancel_order(tp_order['id'])
-                        tp_order = None
-                        take_profit_price = None
+                if adx_val >= 25:
+                    logging.info(f"ADX {adx_val} >= 25, strong trend detected.")
+                    if long_trend and price_above_emas and rsi_val < 70 and price_up_5m and price_up_1m:
+                        market = exchange.market(SYMBOL)
+                        min_qty = market['limits']['amount']['min']
+                        precision = int(market['precision']['amount'])
+                        qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
+                        # Cancel any existing SL and TP orders before placing new entry
+                        if stop_loss_order:
+                            cancel_order(stop_loss_order['id'])
+                            stop_loss_order = None
+                        if tp_order:
+                            cancel_order(tp_order['id'])
+                            tp_order = None
+                            take_profit_price = None
 
-                    if qty > 0:
-                        # Place entry limit order slightly below current price (e.g., 0.1% below market for long)
-                        entry_price = last_1m['close'] * 1.001
-                        entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
+                        if qty > 0:
+                            # Place entry limit order slightly below current price (e.g., 0.1% below market for long)
+                            entry_price = last_1m['close'] * 1.001
+                            entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
 
-                elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
-                    market = exchange.market(SYMBOL)
-                    min_qty = market['limits']['amount']['min']
-                    precision = market['precision']['amount']
-                    qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
-                    # Cancel any existing SL and TP orders before placing new entry
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                    if tp_order:
-                        cancel_order(tp_order['id'])
-                        tp_order = None
-                        take_profit_price = None
+                    elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
+                        market = exchange.market(SYMBOL)
+                        min_qty = market['limits']['amount']['min']
+                        precision = market['precision']['amount']
+                        qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
+                        # Cancel any existing SL and TP orders before placing new entry
+                        if stop_loss_order:
+                            cancel_order(stop_loss_order['id'])
+                            stop_loss_order = None
+                        if tp_order:
+                            cancel_order(tp_order['id'])
+                            tp_order = None
+                            take_profit_price = None
 
-                    if qty > 0:
-                        # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
-                        entry_price = last_1m['close'] * 1.001
-                        entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
-
+                        if qty > 0:
+                            # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
+                            entry_price = last_1m['close'] * 1.001
+                            entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
+                else:
+                    logging.info(f"ADX {adx_val} < 25, no strong trend. Skipping entries.")
+                    time.sleep(60)
+                    continue
             # Check for exit conditions
             # Take Profit Check
-            if position_side == 'long':
-                if take_profit_price is None and position_size > 0:    
-                    take_profit_price = (position_size and last_1m['close'] + atr_val * ATR_MULTIPLIER)
+            if position_side == 'long' and position_size > 0 and entry_price is not None:
+                if not tp_set:
+                    take_profit_price = entry_price + atr_val * ATR_MULTIPLIER    
+                    tp_set = True
+                    print(f"{datetime.now()} - TP for LONG set at {take_profit_price}")
+                if not sl_set:
+                    stop_loss_price = entry_price - atr_val * ATR_MULTIPLIER
+                    sl_set = True
+                    print(f"{datetime.now()} - SL for LONG set at {stop_loss_price}")   
 
                 # Take Profit Check
                 if take_profit_price is not None and last_1m['close'] >= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing LONG")
                     if stop_loss_order:
-                        try:
-                            cancel_order(stop_loss_order['id'])
-                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling SL: {e}")
+                        cancel_order(stop_loss_order['id'])
                         stop_loss_order = None
+                        print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
                     if tp_order:
-                        try:
-                            cancel_order(tp_order['id'])
-                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling TP: {e}")
+                        cancel_order(tp_order['id'])
+                        print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
                         tp_order = None
                     close_position('long', position_size)
                     take_profit_price = None
+                    tp_set = False
+                    sl_set = False
+                #Stop Loss Check
+                elif stop_loss_price is not None and last_1m['close'] <= stop_loss_price:
+                    print(f"{datetime.now()} - SL hit, closing LONG")
+                    if tp_order:
+                        cancel_order(tp_order['id'])
+                        tp_order = None
+                        print(f"{datetime.now()} - Cancelled TP order")
+                    if stop_loss_order:
+                        cancel_order(stop_loss_order['id'])
+                        stop_loss_order = None
+                        print(f"{datetime.now()} - Cancelled SL order")
+
+                    close_position('long', position_size)
+                    take_profit_price = None
+                    stop_loss_price = None
+                    tp_set = False
+                    sl_set = False
+
 
                 # RSI Exit (overbought) or EMA Exit (trend reversal)
-                if rsi_val > 70:
-                    reason = "RSI exit" if rsi_val > 70 else "EMA exit"
-                    print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for LONG")
+                #if rsi_val > 70:
+                    #reason = "RSI exit"
+                    #print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for LONG")
                     # Cancel both TP and SL before placing fresh
-                    if tp_order:
-                        try:
-                            cancel_order(tp_order['id'])
-                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling TP: {e}")
-                        tp_order = None
+                    #if tp_order:
+                        #try:
+                            #cancel_order(tp_order['id'])
+                            #print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling TP: {e}")
+                        #tp_order = None
 
-                    if stop_loss_order:
-                        try:
-                            cancel_order(stop_loss_order['id'])
-                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling SL: {e}")
-                        stop_loss_order = None
+                    #if stop_loss_order:
+                        #try:
+                            #cancel_order(stop_loss_order['id'])
+                            #print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling SL: {e}")
+                        #stop_loss_order = None
 
                     # Place fresh SL after RSI exit
-                    close_position('long', position_size)
+                    #close_position('long', position_size)
+                    #atr_sl_active = False  # Reset ATR SL flag after position closed
 
                 # EMA Exit (trend reversal)
-                elif not long_trend or not price_above_emas:
-                    print(f"{datetime.now()} - EMA exit, refreshing SL")
-                    if tp_order:
-                        try:
-                            cancel_order(tp_order['id'])
-                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling TP: {e}")
-                        tp_order = None
+                #elif not long_trend or not price_above_emas:
+                    #print(f"{datetime.now()} - EMA exit, refreshing SL")
+                    #if tp_order:
+                        #try:
+                            #cancel_order(tp_order['id'])
+                            #print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling TP: {e}")
+                        #tp_order = None
 
-                    if stop_loss_order:
-                        try:
-                            cancel_order(stop_loss_order['id'])
-                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling SL: {e}")
-                        stop_loss_order = None
+                    #if stop_loss_order:
+                        #try:
+                            #cancel_order(stop_loss_order['id'])
+                            #print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling SL: {e}")
+                        #stop_loss_order = None
 
                     # Place fresh SL after EMA exit
-                    close_position('long', position_size)
-                else:
+                    #close_position('long', position_size)
+                    #atr_sl_active = False  # Reset ATR SL flag after position closed
+                #else:
                     # Neither RSI nor EMA triggered
-                    print(f"{datetime.now()} - Holding LONG (RSI={rsi_val}, Trend={long_trend}, PriceAboveEMAs={price_above_emas})")
+                    #print(f"{datetime.now()} - Holding LONG (RSI={rsi_val}, Trend={long_trend}, PriceAboveEMAs={price_above_emas})")
 
-                # Guard for SL
-                if (position is not None and position_size > 0 
-                    and entry_price is not None 
-                    and atr_val is not None and not pd.isna(atr_val)):
-                    # Continuous ATR stop loss independent of EMA/RSI
-                    atr_sl_price = round(entry_price - atr_val * ATR_STOP_MULTIPLIER, 2)
-
-                    # If price goes below ATR SL → exit immediately
-                    if last_1m['close'] <= atr_sl_price:
-                        print(f"{datetime.now()} - ATR STOP LOSS hit, closing LONG at {atr_sl_price}")
-
-                        # Cancel TP + SL before placing fresh
-                        if tp_order:
-                            try:
-                                cancel_order(tp_order['id'])
-                                print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                            except Exception as e:
-                                print(f"Error cancelling TP: {e}")
-                            tp_order = None
-
-                        if stop_loss_order:
-                            try:
-                                cancel_order(stop_loss_order['id'])
-                                print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                            except Exception as e:
-                                print(f"Error cancelling SL: {e}")
-                            stop_loss_order = None
-
-                        # Use your existing close_position (LIMIT order)
-                        close_position('long', position_size)
+               
             else:
                 # No position at all → skip stop loss logic completely
                 pass
@@ -722,102 +752,101 @@ def main():
 
 
             if position_side == 'short':
-                if take_profit_price is None and position_size > 0:    
-                    take_profit_price = (position_size and last_1m['close'] - atr_val * ATR_MULTIPLIER)
+                if take_profit_price is None and position_size > 0 and entry_price is not None and atr_val is not None:
+                    if not tp_set:
+                        take_profit_price = entry_price - atr_val * ATR_MULTIPLIER
+                        tp_set = True
+                        print(f"{datetime.now()} - TP for SHORT set at {take_profit_price}")
+                    if not sl_set:
+                        stop_loss_price = entry_price + atr_val * ATR_MULTIPLIER
+                        sl_set = True
+                        print(f"{datetime.now()} - SL for SHORT set at {stop_loss_price}")
     
                 # Take Profit Check
                 if take_profit_price is not None and last_1m['close'] <= take_profit_price:
-                    print(f"{datetime.now()} - TP hit, closing SHORT")
+                    print(f"{datetime.now()} - TP hit, closing SHORT at {last_1m['close']}")
                     if stop_loss_order:
                         cancel_order(stop_loss_order['id'])
                         stop_loss_order = None
                     if tp_order:
                         cancel_order(tp_order['id'])
                         tp_order = None
+                    
+                    
                     close_position('short', position_size)
                     take_profit_price = None
+                    stop_loss_price = None
+                    tp_set = False
+                    sl_set = False
 
-                # RSI Exit (oversold) or EMA Exit (trend reversal)
-                if rsi_val < 30:
-                    reason = "RSI exit" if rsi_val < 30 else "EMA exit"
-                    print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for SHORT")
-                    # Cancel both TP and SL before placing fresh
+
+                #Stop Loss Check
+                elif stop_loss_price is not None and last_1m['close'] >= stop_loss_price:
+                    print(f"{datetime.now()} - SL hit, closing SHORT")
                     if tp_order:
-                        try:
-                            cancel_order(tp_order['id'])
-                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling TP: {e}")
+                        cancel_order(tp_order['id'])
                         tp_order = None
-
+                        print(f"{datetime.now()} - Cancelled TP order")
                     if stop_loss_order:
-                        try:
-                            cancel_order(stop_loss_order['id'])
-                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling SL: {e}")
+                        cancel_order(stop_loss_order['id'])
                         stop_loss_order = None
-                     # Place fresh SL after RSI exit
+                        print(f"{datetime.now()} - Cancelled SL order")
+
                     close_position('short', position_size)
+                    take_profit_price = None
+                    stop_loss_price = None
+                    tp_set = False
+                    sl_set = False
 
-                # EMA Exit (trend reversal)
-                elif not short_trend or not price_below_emas:
-                    print(f"{datetime.now()} - EMA exit, refreshing SL")
-                    if tp_order:
-                        try:
-                            cancel_order(tp_order['id'])
-                            print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling TP: {e}")
-                        tp_order = None
+                ## RSI Exit (oversold) or EMA Exit (trend reversal)
+                #if rsi_val < 30:
+                    #reason = "RSI exit" if rsi_val < 30 else "EMA exit"
+                    #print(f"{datetime.now()} - {reason}, placing stop loss LIMIT for SHORT")
+                    ## Cancel both TP and SL before placing fresh
+                    #if tp_order:
+                        #try:
+                            #cancel_order(tp_order['id'])
+                            #print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling TP: {e}")
+                        #tp_order = None
 
-                    if stop_loss_order:
-                        try:
-                            cancel_order(stop_loss_order['id'])
-                            print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                        except Exception as e:
-                            print(f"Error cancelling SL: {e}")
-                        stop_loss_order = None
+                    #if stop_loss_order:
+                        #try:
+                            #cancel_order(stop_loss_order['id'])
+                            #print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling SL: {e}")
+                        #stop_loss_order = None
+                     # Place fresh SL after RSI exit
+                    #close_position('short', position_size)
+
+                ## EMA Exit (trend reversal)
+                #elif not short_trend or not price_below_emas:
+                    #print(f"{datetime.now()} - EMA exit, refreshing SL")
+                    #if tp_order:
+                        #try:
+                            #cancel_order(tp_order['id'])
+                            #print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling TP: {e}")
+                        #tp_order = None
+
+                    #if stop_loss_order:
+                        #try:
+                            #cancel_order(stop_loss_order['id'])
+                            #print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                        #except Exception as e:
+                            #print(f"Error cancelling SL: {e}")
+                        #stop_loss_order = None
 
                     # Place fresh SL after EMA exit
-                    close_position('short', position_size)
-                else:
-                    #neither RSI nor EMA triggered
-                    print(f"{datetime.now()} - Holding SHORT (RSI={rsi_val}, Trend={short_trend}, PriceBelowEMAs={price_below_emas})")
-                #Guard for SL
-                if (position is not None and position_size > 0 
-                    and entry_price is not None 
-                    and atr_val is not None and not pd.isna(atr_val)):
-                # Continuous ATR stop loss independent of EMA/RSI
-                    if (position is not None and position_size > 0 
-                        and entry_price is not None 
-                        and atr_val is not None and not pd.isna(atr_val)):
+                    #close_position('short', position_size)
+                #else:
+                    ##neither RSI nor EMA triggered
+                    #print(f"{datetime.now()} - Holding SHORT (RSI={rsi_val}, Trend={short_trend}, PriceBelowEMAs={price_below_emas})")
+               
 
-                        atr_sl_price = round(entry_price + atr_val * ATR_STOP_MULTIPLIER, 2)
-
-                        # If price goes above ATR SL → exit immediately
-                        if last_1m['close'] >= atr_sl_price:
-                            print(f"{datetime.now()} - ATR STOP LOSS hit, closing SHORT at {atr_sl_price}")
-
-                            # Cancel TP + SL before placing fresh
-                            if tp_order:
-                                try:
-                                    cancel_order(tp_order['id'])
-                                    print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
-                                except Exception as e:
-                                    print(f"Error cancelling TP: {e}")
-                                tp_order = None
-
-                            if stop_loss_order:
-                                try:
-                                    cancel_order(stop_loss_order['id'])
-                                    print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
-                                except Exception as e:
-                                    print(f"Error cancelling SL: {e}")
-                                stop_loss_order = None
-
-                            # Use your existing close_position (LIMIT order)
-                            close_position('short', position_size)
                 else:
                     # No position at all → skip stop loss logic completely
                     pass
