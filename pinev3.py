@@ -41,7 +41,7 @@ exchange = ccxt.bybit({
     'secret': 'e248gw6I9CLmlWW2SibEL45ZuXJXp3u55Q9R',
     'enableRateLimit': True,
     'options': {
-        'defaultType': 'linear''future',
+        'defaultType': 'linear',
         'recvWindow': 15000, # 10 secs
     }
 })
@@ -90,6 +90,14 @@ take_profit_price = None
 ATR_PERIOD = 14
 ATR_STOP_MULTIPLIER = 2   # stop loss = entry ± ATR × multiplier
 TIMEFRAME = '1m'  # Main timeframe for signals
+#Trend Filters
+ADX_PERIOD = 14
+ADX_THRESHOLD = 25          # strength gate
+USE_DI_GATE = True         # require DI direction to agree with trade
+DI_BUFFER = 0               # optional, set >0 if you also require DI dominance
+USE_LAST_CLOSED = True      # use last closed bar for ADX
+MAX_STRETCH = 0.005         # 0.5% max distance from EMA20 to allow entry
+
 # Helper indicator functions
 def ema(prices, length):
     return prices.ewm(span=length, adjust=False).mean()
@@ -131,10 +139,19 @@ def fetch_ohlcv(symbol, timeframe, limit=100):
     return df
 
 
-def calculate_order_quantity(current_price, usdt_amount, leverage, precision, min_qty):
-    qty = (usdt_amount * leverage) / current_price
-    qty = math.floor(qty * (10 ** precision)) / (10 ** precision)
-    return max(qty, min_qty)
+def calculate_order_quantity(symbol, current_price, usdt_amount, leverage):
+    market = exchange.market(symbol)
+    #target coin amount
+    raw_qty = (usdt_amount * leverage) / current_price
+    #Snap to exchange precision
+    qty = float(exchange.amount_to_precision(symbol, raw_qty))
+
+    #enforce minimum order size
+    min_qty = float(market['limits']['amount']['min'] or 0)
+    if min_qty and qty < min_qty:
+        qty = float(exchange.amount_to_preicision(symbol, min_qty))
+    
+    return qty
 
 
 
@@ -324,25 +341,44 @@ def close_position(side, amount):
     except Exception as e:
         print(f"Close position limit order error: {e}")
         return None
-def calculate_adx(df, period=14):
-    df = df.copy()
-    df['TR'] = np.maximum(df['high'] - df['low'],
-                          np.maximum(abs(df['high'] - df['close'].shift()),
-                                     abs(df['low'] - df['close'].shift())))
-    df['+DM'] = np.where((df['high'] - df['high'].shift()) > (df['low'].shift() - df['low']),
-                         np.maximum(df['high'] - df['high'].shift(), 0), 0)
-    df['-DM'] = np.where((df['low'].shift() - df['low']) > (df['high'] - df['high'].shift()),
-                         np.maximum(df['low'].shift() - df['low'], 0), 0)
+def calculate_adx(df, period=14, eps=1e-9):
+    if df is None or df.empty or len(df) < period + 5:
+        out = df.copy()
+        out['+DI'] = np.nan; out['-DI'] = np.nan; out['ADX'] = np.nan
+        return out
 
-    df['TR14'] = df['TR'].rolling(period).sum()
-    df['+DM14'] = df['+DM'].rolling(period).sum()
-    df['-DM14'] = df['-DM'].rolling(period).sum()
+    d = df[['high','low','close']].astype(float).copy()
 
-    df['+DI14'] = 100 * (df['+DM14'] / df['TR14'])
-    df['-DI14'] = 100 * (df['-DM14'] / df['TR14'])
-    df['DX'] = (abs(df['+DI14'] - df['-DI14']) / (df['+DI14'] + df['-DI14'])) * 100
-    df['ADX'] = df['DX'].rolling(period).mean()
-    return df
+    prev_close = d['close'].shift(1)
+    tr = pd.concat([
+        d['high'] - d['low'],
+        (d['high'] - prev_close).abs(),
+        (d['low']  - prev_close).abs()
+    ], axis=1).max(axis=1)
+
+    upMove   = d['high'] - d['high'].shift(1)
+    downMove = d['low'].shift(1) - d['low']
+    plus_dm  = np.where((upMove > downMove) & (upMove > 0), upMove, 0.0)
+    minus_dm = np.where((downMove > upMove) & (downMove > 0), downMove, 0.0)
+
+    alpha = 1.0 / period
+    tr_rma       = tr.ewm(alpha=alpha, adjust=False).mean()
+    plus_dm_rma  = pd.Series(plus_dm, index=d.index).ewm(alpha=alpha, adjust=False).mean()
+    minus_dm_rma = pd.Series(minus_dm, index=d.index).ewm(alpha=alpha, adjust=False).mean()
+
+    denom = (tr_rma + eps)
+    plus_di  = 100.0 * (plus_dm_rma  / denom)
+    minus_di = 100.0 * (minus_dm_rma / denom)
+
+    dx = 100.0 * ((plus_di - minus_di).abs() / ((plus_di + minus_di).replace(0, np.nan) + eps))
+    adx = dx.ewm(alpha=alpha, adjust=False).mean()
+
+    out = df.copy()
+    out['+DI'] = plus_di.replace([np.inf, -np.inf], np.nan)
+    out['-DI'] = minus_di.replace([np.inf, -np.inf], np.nan)
+    out['ADX'] = adx.replace([np.inf, -np.inf], np.nan)
+    return out
+
 
 
 # --- MAIN STRATEGY LOOP ---
@@ -387,7 +423,7 @@ def main():
                 logging.warning("1m OHLCV data is empty, skipping iteration.")
                 time.sleep(60)
                 continue
-            df_5m = fetch_ohlcv(SYMBOL, '5m')
+            df_5m = fetch_ohlcv(SYMBOL, '5m', limit=100)
             if df_5m.empty:
                 logging.warning("5m OHLCV data is empty, skipping iteration.")
                 time.sleep(60)
@@ -409,8 +445,8 @@ def main():
             df_1m['atr'] = atr(df_1m)
             last_1m = df_1m.iloc[-1]
 
-            df_5m = calculate_adx(df_5m)
-            adx_val = df_5m['ADX'].iloc[-1]
+            df_5m = calculate_adx(df_5m, period=14)
+            adx_val = df_5m['ADX'].iloc[-2] if len(df_5m) >= 2 else np.nan
 
 
 
@@ -423,7 +459,15 @@ def main():
                 continue
             
             if pd.isna(adx_val):
-                logging.info("ADX not ready yet, skipping iteration.")
+                # One-time diagnostics to find root cause
+                # (Guard with a flag if you don’t want this every minute.)
+                last_rows = df_5m[['timestamp','high','low','close','+DI','-DI','ADX']].tail(5) \
+                    if 'timestamp' in df_5m.columns else df_5m[['high','low','close','+DI','-DI','ADX']].tail(5)
+                logging.info("ADX not ready (NaN). Diagnostics:")
+                logging.info(f"df_5m len={len(df_5m)}, NaNs: "
+                            f"TR? can't see here, +DI NaNs={df_5m['+DI'].isna().sum()}, "
+                            f"-DI NaNs={df_5m['-DI'].isna().sum()}, ADX NaNs={df_5m['ADX'].isna().sum()}")
+                logging.info(f"Tail:\n{last_rows}")
                 time.sleep(60)
                 continue
 
@@ -466,6 +510,29 @@ def main():
 
             rsi_val = last_1m['rsi']
             atr_val = last_1m['atr']
+            # Fetch more 5m bars so ADX has history
+            df_5m = fetch_ohlcv(SYMBOL, '5m', limit=300)  # ~25 hours
+            df_5m = calculate_adx(df_5m, period=ADX_PERIOD)
+
+            # ADX values (use last closed bar to avoid flicker)
+            adx_idx  = -2 if USE_LAST_CLOSED and len(df_5m) >= 2 else -1
+            adx_prev = df_5m['ADX'].iloc[adx_idx-1] if len(df_5m) >= 3 else np.nan
+            adx_val  = df_5m['ADX'].iloc[adx_idx]
+            di_plus  = df_5m['+DI'].iloc[adx_idx]
+            di_minus = df_5m['-DI'].iloc[adx_idx]
+            adx_rising = adx_val > adx_prev
+
+            # --- NaN guard ---
+            if pd.isna(adx_val) or pd.isna(adx_prev) or pd.isna(di_plus) or pd.isna(di_minus):
+                logging.info("ADX/DI not ready (insufficient history), skipping iteration.")
+                time.sleep(60)
+                continue
+
+            # 1m overextension vs EMA20 (use last closed 1m bar)
+            last_1m_closed = df_1m.iloc[-2]
+            ema_fast_1m    = df_1m['ema_fast'].iloc[-2]
+            stretch = (last_1m_closed['close'] - ema_fast_1m) / ema_fast_1m  # + = above EMA, - = below
+
 
             if entry_order:
                 status = get_order_status(entry_order['id'])
@@ -599,13 +666,28 @@ def main():
 
             # 3. Entry logic (only if no open position and no pending entry order)
             if (position_side is None or position_size == 0) and entry_order is None:
-                if adx_val >= 25:
-                    logging.info(f"ADX {adx_val} >= 25, strong trend detected.")
-                    if long_trend and price_above_emas and rsi_val < 70 and price_up_5m and price_up_1m:
-                        market = exchange.market(SYMBOL)
-                        min_qty = market['limits']['amount']['min']
-                        precision = int(market['precision']['amount'])
-                        qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
+                # --- ADX slope gate ---
+                if not (adx_val >= 25 and adx_rising):
+                    logging.info(f"Skip entry — ADX {adx_val:.2f} (prev {adx_prev:.2f}) not strong+rising.")
+                    time.sleep(60)
+                    continue
+
+                # --- Overextension filter ---
+                stretch = (last_1m['close'] - last_1m['ema_fast']) / last_1m['ema_fast']
+
+                if long_trend and price_above_emas and rsi_val < 70 and price_up_5m and price_up_1m:
+                    # DI direction filter (buyers must dominate)
+                    di_ok = (di_plus > di_minus + DI_BUFFER)
+                    logging.info(f"[DI] Long setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
+
+
+                    if USE_DI_GATE and not di_ok:
+                        logging.info("Skip LONG — +DI not in favor.")
+                    elif stretch > 0.005:
+                        logging.info(f"Skip LONG — overextended above EMA20 ({stretch*100:.2f}%).")
+                    else:
+                        qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+                        logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
                         # Cancel any existing SL and TP orders before placing new entry
                         if stop_loss_order:
                             cancel_order(stop_loss_order['id'])
@@ -620,28 +702,31 @@ def main():
                             entry_price = last_1m['close'] * 1.001
                             entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
 
-                    elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
-                        market = exchange.market(SYMBOL)
-                        min_qty = market['limits']['amount']['min']
-                        precision = market['precision']['amount']
-                        qty = calculate_order_quantity(last_1m['close'], TRADE_USDT, LEVERAGE, precision, min_qty)
-                        # Cancel any existing SL and TP orders before placing new entry
-                        if stop_loss_order:
-                            cancel_order(stop_loss_order['id'])
-                            stop_loss_order = None
-                        if tp_order:
-                            cancel_order(tp_order['id'])
-                            tp_order = None
-                            take_profit_price = None
+                        elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
+                            #DI direction filter (sellers must dominate)
+                            di_ok = (di_minus > di_plus + DI_BUFFER)
+                            logging.info(f"[DI] Short setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
+                            if USE_DI_GATE and not di_ok:
+                                logging.info("Skip SHORT — -DI not in favor.")
+                            elif -stretch > 0.005:
+                                logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
+                            else:
+                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+                                logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
+                                # Cancel any existing SL and TP orders before placing new entry
+                                if stop_loss_order:
+                                    cancel_order(stop_loss_order['id'])
+                                    stop_loss_order = None
+                                if tp_order:
+                                    cancel_order(tp_order['id'])
+                                    tp_order = None
+                                    take_profit_price = None
 
-                        if qty > 0:
-                            # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
-                            entry_price = last_1m['close'] * 1.001
-                            entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
-                else:
-                    logging.info(f"ADX {adx_val} < 25, no strong trend. Skipping entries.")
-                    time.sleep(60)
-                    continue
+                                if qty > 0:
+                                    # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
+                                    entry_price = last_1m['close'] * 1.001
+                                    entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
+            
             # Check for exit conditions
             # Take Profit Check
             if position_side == 'long' and position_size > 0 and entry_price is not None:
