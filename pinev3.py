@@ -37,8 +37,8 @@ SYMBOL = 'ETH/USDT:USDT'
 
 # Configure Bybit API for real trading (use with caution)
 exchange = ccxt.bybit({
-    'apiKey': 'jUoXF93eP3xF91FUBZ',
-    'secret': 'e248gw6I9CLmlWW2SibEL45ZuXJXp3u55Q9R',
+    'apiKey': 'Z4JbKx0Ck80GhZI08A',
+    'secret': 'BJDFVGfR8WdPODBv864wXBJBSnu5liGIWqoG',
     'enableRateLimit': True,
     'options': {
         'defaultType': 'linear',
@@ -149,7 +149,7 @@ def calculate_order_quantity(symbol, current_price, usdt_amount, leverage):
     #enforce minimum order size
     min_qty = float(market['limits']['amount']['min'] or 0)
     if min_qty and qty < min_qty:
-        qty = float(exchange.amount_to_preicision(symbol, min_qty))
+        qty = float(exchange.amount_to_precision(symbol, min_qty))
     
     return qty
 
@@ -341,6 +341,22 @@ def close_position(side, amount):
     except Exception as e:
         print(f"Close position limit order error: {e}")
         return None
+def close_position_market(side, size):
+    try:
+        opposite_side = 'sell' if side == 'long' else 'buy'
+        order = exchange.create_order(
+            symbol=SYMBOL,
+            type='market',
+            side=opposite_side,
+            amount=size,
+            params={"reduceOnly": True}
+        )
+        logging.info(f"🛑 Market {opposite_side.upper()} to close {side} position: {order}")
+        return order
+    except Exception as e:
+        logging.error(f"❌ Error closing {side} with market order: {e}")
+        return None
+
 def calculate_adx(df, period=14, eps=1e-9):
     if df is None or df.empty or len(df) < period + 5:
         out = df.copy()
@@ -348,6 +364,8 @@ def calculate_adx(df, period=14, eps=1e-9):
         return out
 
     d = df[['high','low','close']].astype(float).copy()
+
+
 
     prev_close = d['close'].shift(1)
     tr = pd.concat([
@@ -383,6 +401,12 @@ def calculate_adx(df, period=14, eps=1e-9):
 
 # --- MAIN STRATEGY LOOP ---
 def main():
+    in_position = False              # Tracks whether a trade is open
+    tp_triggered = False             # Prevents TP from triggering multiple times
+    is_trading = False               # Prevents duplicate trade() calls
+    current_position_size = 0.0      # Stores current position size locally
+    stop_loss_price = None            # Stores stop loss price locally
+    take_profit_price = None  
     set_leverage(SYMBOL, LEVERAGE)
     position = get_open_position()
     logging.info(f"DEBUG: position returned: {position} (type: {type(position)})")
@@ -626,7 +650,7 @@ def main():
                     atr_stop = None
 
                 if atr_stop:
-                    logging.info(f"📉 ATR Stop Loss for {position_side}: {atr_stop:.2f}")
+                    logging.info(f"📉[INFO] ATR model level (not active SL): {atr_stop:.2f}")
 
 
 
@@ -688,10 +712,7 @@ def main():
                     else:
                         qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
                         logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
-                        # Cancel any existing SL and TP orders before placing new entry
-                        if stop_loss_order:
-                            cancel_order(stop_loss_order['id'])
-                            stop_loss_order = None
+                        
                         if tp_order:
                             cancel_order(tp_order['id'])
                             tp_order = None
@@ -702,50 +723,37 @@ def main():
                             entry_price = last_1m['close'] * 1.001
                             entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
 
-                        elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
-                            #DI direction filter (sellers must dominate)
-                            di_ok = (di_minus > di_plus + DI_BUFFER)
-                            logging.info(f"[DI] Short setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
-                            if USE_DI_GATE and not di_ok:
-                                logging.info("Skip SHORT — -DI not in favor.")
-                            elif -stretch > 0.005:
-                                logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
-                            else:
-                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
-                                logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
+                elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
+                        #DI direction filter (sellers must dominate)
+                        di_ok = (di_minus > di_plus + DI_BUFFER)
+                        logging.info(f"[DI] Short setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
+                        if USE_DI_GATE and not di_ok:
+                            logging.info("Skip SHORT — -DI not in favor.")
+                        elif -stretch > 0.005:
+                            logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
+                        else:
+                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+                            logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
                                 # Cancel any existing SL and TP orders before placing new entry
-                                if stop_loss_order:
-                                    cancel_order(stop_loss_order['id'])
-                                    stop_loss_order = None
-                                if tp_order:
-                                    cancel_order(tp_order['id'])
-                                    tp_order = None
-                                    take_profit_price = None
+                                
+                            if tp_order:
+                                cancel_order(tp_order['id'])
+                                tp_order = None
+                                take_profit_price = None
 
-                                if qty > 0:
-                                    # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
-                                    entry_price = last_1m['close'] * 1.001
-                                    entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
+                            if qty > 0:
+                                # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
+                                entry_price = last_1m['close'] * 1.001
+                                entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
             
             # Check for exit conditions
             # Take Profit Check
-            if position_side == 'long' and position_size > 0 and entry_price is not None:
-                if not tp_set:
-                    take_profit_price = entry_price + atr_val * ATR_MULTIPLIER    
-                    tp_set = True
-                    print(f"{datetime.now()} - TP for LONG set at {take_profit_price}")
-                if not sl_set:
-                    stop_loss_price = entry_price - atr_val * ATR_MULTIPLIER
-                    sl_set = True
-                    print(f"{datetime.now()} - SL for LONG set at {stop_loss_price}")   
+            if position_side == 'long' and position_size > 0 and entry_price is not None:   
 
                 # Take Profit Check
                 if take_profit_price is not None and last_1m['close'] >= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing LONG")
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                        print(f"{datetime.now()} - Cancelled SL {stop_loss_order['id']}")
+                    
                     if tp_order:
                         cancel_order(tp_order['id'])
                         print(f"{datetime.now()} - Cancelled TP {tp_order['id']}")
@@ -761,12 +769,8 @@ def main():
                         cancel_order(tp_order['id'])
                         tp_order = None
                         print(f"{datetime.now()} - Cancelled TP order")
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                        print(f"{datetime.now()} - Cancelled SL order")
 
-                    close_position('long', position_size)
+                    close_position_market('long', position_size)
                     take_profit_price = None
                     stop_loss_price = None
                     tp_set = False
@@ -838,21 +842,12 @@ def main():
 
             if position_side == 'short':
                 if take_profit_price is None and position_size > 0 and entry_price is not None and atr_val is not None:
-                    if not tp_set:
-                        take_profit_price = entry_price - atr_val * ATR_MULTIPLIER
-                        tp_set = True
-                        print(f"{datetime.now()} - TP for SHORT set at {take_profit_price}")
-                    if not sl_set:
-                        stop_loss_price = entry_price + atr_val * ATR_MULTIPLIER
-                        sl_set = True
-                        print(f"{datetime.now()} - SL for SHORT set at {stop_loss_price}")
-    
+                    pass
                 # Take Profit Check
                 if take_profit_price is not None and last_1m['close'] <= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing SHORT at {last_1m['close']}")
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
+                    pass
+                    
                     if tp_order:
                         cancel_order(tp_order['id'])
                         tp_order = None
@@ -872,12 +867,8 @@ def main():
                         cancel_order(tp_order['id'])
                         tp_order = None
                         print(f"{datetime.now()} - Cancelled TP order")
-                    if stop_loss_order:
-                        cancel_order(stop_loss_order['id'])
-                        stop_loss_order = None
-                        print(f"{datetime.now()} - Cancelled SL order")
 
-                    close_position('short', position_size)
+                    close_position_market('short', position_size)
                     take_profit_price = None
                     stop_loss_price = None
                     tp_set = False
