@@ -8,6 +8,8 @@ import logging
 from collections import deque
 from datetime import datetime
 import json
+from datetime import datetime, timedelta
+
 
 #slow internet fix for turkey
 def get_server_time_offset():
@@ -30,7 +32,17 @@ def get_corrected_timestamp():
     return int(time.time() * 1000) + offset - margin
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+log_filename = f"bot_log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_filename, mode='a', encoding='utf-8'),
+        logging.StreamHandler()  # still prints to terminal
+    ]
+)
 
 # Set trading pair
 SYMBOL = 'ETH/USDT:USDT'
@@ -105,6 +117,24 @@ USE_EMA_SQUEEZE_FILTER = True
 
 EMA_DISTANCE_THRESHOLD = 0.004  # 0.3% distance from EMA100/200
 EMA_SQUEEZE_THRESHOLD = 0.002   # 0.2% → EMAs converging too close
+
+# --- Regime Filter Settings ---
+USE_REGIME_FILTER = True
+ATR_LOOKBACK = 20
+ATR_TREND_WINDOW = 5
+ATR_MIN_MULTIPLIER = 1.2   # require ATR rising by at least 20% vs past
+R2_THRESHOLD = 0.3         # require 1m trend R² > 0.3
+
+# --- Adaptive Sizing Settings ---
+USE_ADAPTIVE_SIZING = True
+VOL_SPIKE_MULTIPLIER = 2.0  # shrink size if ATR > 2x rolling median
+MIN_POSITION_SCALE = 0.25   # minimum size fraction (25%)
+
+# --- Stop Hunt Filter Settings ---
+USE_STOP_HUNT_FILTER = True
+WICK_RATIO_THRESHOLD = 0.6   # wick > 60% of candle = stop hunt
+VOLUME_SPIKE_MULTIPLIER = 2  # volume > 2x median = suspicious
+
 
 
 # Helper indicator functions
@@ -361,6 +391,7 @@ def close_position_market(side, size):
             params={"reduceOnly": True}
         )
         logging.info(f"🛑 Market {opposite_side.upper()} to close {side} position: {order}")
+        print(f"🛑 Market {opposite_side.upper()} to close {side} position: {order}")
         return order
     except Exception as e:
         logging.error(f"❌ Error closing {side} with market order: {e}")
@@ -406,6 +437,41 @@ def calculate_adx(df, period=14, eps=1e-9):
     out['ADX'] = adx.replace([np.inf, -np.inf], np.nan)
     return out
 
+def calc_r2(series, window=20):
+    """Calculate R² of linear regression slope on close s."""
+    if len(series) < window:
+        return 0
+    y = series[-window:]
+    x = np.arange(len(y))
+    coeffs = np.polyfit(x, y, 1)
+    p = np.poly1d(coeffs)
+    y_hat = p(x)
+    ss_res = np.sum((y - y_hat)**2)
+    ss_tot = np.sum((y - np.mean(y))**2)
+    return 1 - (ss_res / (ss_tot + 1e-9))
+
+def detect_stop_hunt(candle, df, wick_ratio_threshold=0.6, vol_mult=2):
+    """
+    Detect stop-hunt candle: long wick + closes back inside + volume spike.
+    candle: last row (Series)
+    df: dataframe with volume
+    """
+    body = abs(candle['close'] - candle['open'])
+    high_wick = candle['high'] - max(candle['open'], candle['close'])
+    low_wick  = min(candle['open'], candle['close']) - candle['low']
+    full_range = candle['high'] - candle['low']
+
+    # wick ratios
+    upper_ratio = high_wick / (full_range + 1e-9)
+    lower_ratio = low_wick / (full_range + 1e-9)
+
+    # volume check
+    vol_med = df['volume'].rolling(20).median().iloc[-2]
+    vol_spike = candle['volume'] > vol_med * vol_mult
+
+    if (upper_ratio > wick_ratio_threshold or lower_ratio > wick_ratio_threshold) and vol_spike:
+        return True
+    return False
 
 
 # --- MAIN STRATEGY LOOP ---
@@ -468,7 +534,11 @@ def main():
                 time.sleep(60)
                 continue
 
-
+            # --- Cooldown check (add this right here) ---
+            if 'skip_until' in locals() and datetime.now() < skip_until:
+                logging.info(f"Cooling down due to volatility shock until {skip_until.strftime('%H:%M:%S')}")
+                time.sleep(60)
+                continue
             # Calculate indicators
             for df in [df_1m, df_5m, df_1h]:
                 df['ema_fast'] = ema(df['close'], 20)
@@ -491,6 +561,7 @@ def main():
                 logging.warning(f"Indicators not ready yet (ATR={atr_val}, RSI={rsi_val}), skipping...")
                 time.sleep(60)
                 continue
+
             
             if pd.isna(adx_val):
                 # One-time diagnostics to find root cause
@@ -610,16 +681,53 @@ def main():
                     skip_reason = f"EMA100/200 are squeezing together (dist={squeeze_100_200:.4f})"
                     skip_trade = True
 
-            # Final check → block the trade
+            # =============================
+            # --- NEW: Regime / Stop Hunt Filters ---
+            # =============================
+            if USE_REGIME_FILTER and not skip_trade:
+                # ATR rising check
+                recent_atr = df_1m['atr'].rolling(ATR_LOOKBACK).mean().iloc[-ATR_TREND_WINDOW:]
+                atr_rising = recent_atr.iloc[-1] > recent_atr.iloc[0] * ATR_MIN_MULTIPLIER
+
+                # R² trend check
+                r2_val = calc_r2(df_1m['close'], 30)
+
+                if not (atr_rising or r2_val > R2_THRESHOLD):
+                    skip_trade = True
+                    logging.info(f"Skip entry — regime filter failed (ATR rising={atr_rising}, R²={r2_val:.2f})")
+
+            if USE_STOP_HUNT_FILTER and not skip_trade:
+                if detect_stop_hunt(last_1m, df_1m):  # df_1m already fetched
+                    skip_trade = True
+                    logging.info("Skip entry — stop-hunt candle detected.")
+            # --- Volatility Shock Filter ---
+            USE_VOLATILITY_SHOCK_FILTER = True
+            BIG_MOVE_MULTIPLIER = 3.0      # 3x ATR move in one candle = skip
+            COOLDOWN_MINUTES = 30          # skip trading for 30 minutes after shock
+
+            if USE_VOLATILITY_SHOCK_FILTER and not skip_trade:
+                # how much did last candle move compared to ATR?
+                move = abs(last_1m['close'] - last_1m['open'])
+                atr_now = df_1m['atr'].iloc[-1]
+                move_ratio = move / (atr_now + 1e-9)
+
+                if move_ratio > BIG_MOVE_MULTIPLIER:
+                    skip_trade = True
+                    skip_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
+                    logging.info(f"🚨 Volatility shock detected! Move={move_ratio:.2f}×ATR → skipping new trades for {COOLDOWN_MINUTES} min.")
+
+
+            # Final check → block trade here also
             if skip_trade:
-                # only log if the reason CHANGED
-                if skip_reason != last_skip_reason:
-                    logging.info(f"Skip entry — {skip_reason}")
-                    last_skip_reason = skip_reason
                 time.sleep(60)
                 continue
-            else:
-                last_skip_reason = None  # reset if no skip this time
+
+            # Final check → block the trade
+            if skip_trade:
+                logging.info(f"Skip entry — {skip_reason}")
+                time.sleep(60)
+                continue
+
 
             if entry_order:
                 status = get_order_status(entry_order['id'])
@@ -660,10 +768,9 @@ def main():
                                 tp_order = place_limit_order('buy', position_size, take_profit_price, reduce_only=True)
                             
                             # >>> ADD: set FIXED ATR stop right after fill (non-trailing)
-                            df_sl = fetch_ohlcv(SYMBOL, timeframe=TIMEFRAME, limit=50)
-                            df_sl['ATR'] = atr(df_sl, period=ATR_PERIOD)
-                            atr_value_for_sl = df_sl['ATR'].iloc[-1]
+                            atr_value_for_sl = df_1m['atr'].iloc[-1]   # already calculated
                             stop_distance = atr_value_for_sl * ATR_STOP_MULTIPLIER
+
 
 
                             if position_side == 'long':
@@ -721,12 +828,9 @@ def main():
                 entry_price = None
             # === ATR Stop Loss ===
             if position_side and entry_price:
-                # Calculate ATR
-                df = fetch_ohlcv(SYMBOL, timeframe=TIMEFRAME, limit=50)
-                df['ATR'] = atr(df, period=ATR_PERIOD)
-                atr_value = df['ATR'].iloc[-1]
-
+                atr_value = df_1m['atr'].iloc[-1]   # reuse instead of fetching
                 stop_distance = atr_value * ATR_STOP_MULTIPLIER
+
 
                 if position_side.lower() == "long":
                     atr_stop = entry_price - stop_distance
@@ -797,9 +901,19 @@ def main():
                     elif stretch > 0.005:
                         logging.info(f"Skip LONG — overextended above EMA20 ({stretch*100:.2f}%).")
                     else:
-                        qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
-                        logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
-                        
+                        # STEP 3: Adaptive sizing
+                        if USE_ADAPTIVE_SIZING:
+                            atr_now = last_1m['atr']
+                            atr_median = df_1m['atr'].rolling(100).median().iloc[-2]
+                            scale = 1.0
+                            if atr_now > atr_median * VOL_SPIKE_MULTIPLIER:
+                                scale = MIN_POSITION_SCALE
+                                logging.info(f"Adaptive sizing: volatility spike, scaling down to {scale*100:.0f}% size.")
+                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT * scale, LEVERAGE)
+                        else:
+                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+
+                        logging.info(f"[SIZE] px={last_1m['close']:.2f} lev={LEVERAGE} -> qty={qty}")
                         if tp_order:
                             cancel_order(tp_order['id'])
                             tp_order = None
@@ -818,10 +932,19 @@ def main():
                         elif -stretch > 0.005:
                             logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
                         else:
-                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
-                            logging.info(f"[SIZE] px={last_1m['close']:.2f} notional={TRADE_USDT} lev={LEVERAGE} -> qty={qty}")
-                            
-                                # Cancel any existing SL and TP orders before placing new entry
+                            # STEP 3: Adaptive sizing
+                            if USE_ADAPTIVE_SIZING:
+                                atr_now = last_1m['atr']
+                                atr_median = df_1m['atr'].rolling(100).median().iloc[-2]
+                                scale = 1.0
+                                if atr_now > atr_median * VOL_SPIKE_MULTIPLIER:
+                                    scale = MIN_POSITION_SCALE
+                                    logging.info(f"Adaptive sizing: volatility spike, scaling down to {scale*100:.0f}% size.")
+                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT * scale, LEVERAGE)
+                            else:
+                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+
+                            logging.info(f"[SIZE] px={last_1m['close']:.2f} lev={LEVERAGE} -> qty={qty}")
                                 
                             if tp_order:
                                 cancel_order(tp_order['id'])

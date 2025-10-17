@@ -107,6 +107,8 @@ EMA_DISTANCE_THRESHOLD = 0.004  # 0.3% distance from EMA100/200
 EMA_SQUEEZE_THRESHOLD = 0.002   # 0.2% → EMAs converging too close
 
 
+
+
 # Helper indicator functions
 def ema(prices, length):
     return prices.ewm(span=length, adjust=False).mean()

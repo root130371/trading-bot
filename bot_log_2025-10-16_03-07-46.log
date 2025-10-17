@@ -1,0 +1,20 @@
+2025-10-16 03:07:47,575 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-10-16 03:07:47,679 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-10-16 03:07:47,680 - INFO - No open position found.
+2025-10-16 04:35:18,029 - INFO - Skip entry — ADX 17.53 (prev 15.59) not strong+rising.
+2025-10-16 04:36:18,573 - INFO - Skip entry — ADX 17.53 (prev 15.59) not strong+rising.
+2025-10-16 04:37:19,116 - INFO - Skip entry — ADX 17.53 (prev 15.59) not strong+rising.
+2025-10-16 04:38:19,649 - INFO - Skip entry — ADX 17.53 (prev 15.59) not strong+rising.
+2025-10-16 05:11:30,959 - INFO - Skip entry — ADX 19.84 (prev 19.84) not strong+rising.
+2025-10-16 05:12:31,302 - INFO - Skip entry — stop-hunt candle detected.
+2025-10-16 05:13:31,829 - INFO - Skip entry — ADX 19.84 (prev 19.84) not strong+rising.
+2025-10-16 15:00:50,327 - INFO - Skip entry — stop-hunt candle detected.
+2025-10-16 15:01:50,887 - INFO - [DI] Long setup +DI=33.91 -DI=14.15 ok=True
+2025-10-16 15:01:50,931 - INFO - [SIZE] px=4043.12 lev=50 -> qty=0.24
+2025-10-16 15:01:51,252 - INFO - Limit BUY order placed: Side=buy, Amount=0.24, Price=4038.63732, ReduceOnly=False
+2025-10-16 16:38:25,217 - INFO - Limit SELL order placed: Side=sell, Amount=0.24, Price=4046.27, ReduceOnly=True
+2025-10-16 16:38:25,228 - INFO - 🔒 FIXED ATR SL set for LONG at 4031.01 (entry=4038.64, ATR=3.82, x2, take_profit=4046.27)
+2025-10-16 16:38:25,453 - INFO - ✅ In a long position, size=0.24. Checking exit logic...
+2025-10-16 16:38:25,456 - INFO - 📉[INFO] ATR model level (not active SL): 4031.01
+2025-10-16 16:38:25,465 - INFO - 🔒 Fixed SL (protective): 4031.01
+2025-10-16 16:38:25,505 - INFO - 🛑 Market SELL to close long position: {'info': {'orderId': '68fd04c3-540b-4d39-ac21-7e5e0abc8aee', 'orderLinkId': ''}, 'id': '68fd04c3-540b-4d39-ac21-7e5e0abc8aee', 'clientOrderId': None, 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': 'ETH/USDT:USDT', 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': [], 'stopPrice': None}

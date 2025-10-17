@@ -1,0 +1,4 @@
+2025-10-09 16:20:32,294 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-10-09 16:20:32,397 - INFO - DEBUG: position returned: {'side': 'long', 'size': 0.11, 'entryPrice': 4539.45} (type: <class 'dict'>)
+2025-10-09 16:22:33,683 - INFO - ✅ In a long position, size=0.11. Checking exit logic...
+2025-10-09 16:22:33,684 - INFO - 📉[INFO] ATR model level (not active SL): 4519.34

@@ -1,0 +1,18 @@
+2025-10-15 14:31:49,259 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-10-15 14:31:49,364 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-10-15 14:31:49,364 - INFO - No open position found.
+2025-10-15 18:28:13,924 - INFO - Skip entry — ADX 22.57 (prev 23.35) not strong+rising.
+2025-10-15 18:29:14,464 - INFO - Skip entry — ADX 22.57 (prev 23.35) not strong+rising.
+2025-10-15 18:30:15,012 - INFO - Skip entry — ADX 23.45 (prev 22.60) not strong+rising.
+2025-10-15 18:31:15,554 - INFO - Skip entry — ADX 23.45 (prev 22.60) not strong+rising.
+2025-10-15 18:32:16,090 - INFO - Skip entry — ADX 23.45 (prev 22.60) not strong+rising.
+2025-10-15 18:33:16,632 - INFO - Skip entry — ADX 23.45 (prev 22.60) not strong+rising.
+2025-10-15 18:34:17,167 - INFO - Skip entry — ADX 23.45 (prev 22.60) not strong+rising.
+2025-10-15 18:35:17,707 - INFO - Skip entry — ADX 24.40 (prev 23.62) not strong+rising.
+2025-10-15 18:36:18,238 - INFO - Skip entry — ADX 24.40 (prev 23.62) not strong+rising.
+2025-10-15 18:37:18,769 - INFO - Skip entry — ADX 24.40 (prev 23.62) not strong+rising.
+2025-10-15 18:38:19,314 - INFO - Skip entry — ADX 24.40 (prev 23.62) not strong+rising.
+2025-10-15 18:39:19,844 - INFO - Skip entry — ADX 24.40 (prev 23.62) not strong+rising.
+2025-10-15 19:17:33,525 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.27)
+2025-10-15 19:18:34,057 - INFO - Skip entry — ADX 28.45 (prev 29.44) not strong+rising.
+2025-10-15 19:19:34,591 - INFO - Skip entry — ADX 28.45 (prev 29.44) not strong+rising.

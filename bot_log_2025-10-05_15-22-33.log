@@ -1,0 +1,30 @@
+2025-10-05 15:22:35,178 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-10-05 15:22:35,207 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-10-05 15:22:35,211 - INFO - No open position found.
+2025-10-05 17:40:22,403 - INFO - Skip entry — ADX 23.81 (prev 22.55) not strong+rising.
+2025-10-05 17:41:22,949 - INFO - Skip entry — ADX 23.81 (prev 22.55) not strong+rising.
+2025-10-05 17:44:38,211 - INFO - Skip entry — ADX 23.81 (prev 22.55) not strong+rising.
+2025-10-05 18:02:45,572 - INFO - [DI] Short setup +DI=8.86 -DI=28.08 ok=True
+2025-10-05 18:02:45,637 - INFO - [SIZE] px=4541.28 lev=50 -> qty=0.11
+2025-10-05 18:02:45,973 - INFO - Limit SELL order placed: Side=sell, Amount=0.11, Price=4545.30076, ReduceOnly=False
+2025-10-05 18:04:46,322 - INFO - Limit SELL order placed: Side=sell, Amount=0.11, Price=4532.28776, ReduceOnly=False
+2025-10-05 18:06:01,425 - INFO - Limit BUY order placed: Side=buy, Amount=0.11, Price=4517.84, ReduceOnly=True
+2025-10-05 18:06:01,426 - INFO - 🔒 FIXED ATR SL set for SHORT at 4546.74 (entry=4532.29, ATR=7.22, x2, take_profit=4517.84)
+2025-10-05 18:06:01,637 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:06:01,638 - INFO - 📉[INFO] ATR model level (not active SL): 4546.74
+2025-10-05 18:06:01,640 - INFO - 🔒 Fixed SL (protective): 4546.74
+2025-10-05 18:07:02,178 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:07:02,181 - INFO - 📉[INFO] ATR model level (not active SL): 4545.81
+2025-10-05 18:07:02,182 - INFO - 🔒 Fixed SL (protective): 4546.74
+2025-10-05 18:08:02,709 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:08:02,710 - INFO - 📉[INFO] ATR model level (not active SL): 4545.58
+2025-10-05 18:08:02,711 - INFO - 🔒 Fixed SL (protective): 4546.74
+2025-10-05 18:09:03,253 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:09:03,256 - INFO - 📉[INFO] ATR model level (not active SL): 4545.47
+2025-10-05 18:09:03,260 - INFO - 🔒 Fixed SL (protective): 4546.74
+2025-10-05 18:10:03,793 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:10:03,794 - INFO - 📉[INFO] ATR model level (not active SL): 4545.64
+2025-10-05 18:10:03,795 - INFO - 🔒 Fixed SL (protective): 4546.74
+2025-10-05 18:11:04,325 - INFO - ✅ In a short position, size=0.11. Checking exit logic...
+2025-10-05 18:11:04,326 - INFO - 📉[INFO] ATR model level (not active SL): 4545.84
+2025-10-05 18:11:04,328 - INFO - 🔒 Fixed SL (protective): 4546.74
