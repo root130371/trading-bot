@@ -135,6 +135,11 @@ USE_STOP_HUNT_FILTER = True
 WICK_RATIO_THRESHOLD = 0.6   # wick > 60% of candle = stop hunt
 VOLUME_SPIKE_MULTIPLIER = 2  # volume > 2x median = suspicious
 
+# --- Volatility Shock Filter ---
+USE_VOLATILITY_SHOCK_FILTER = True
+BIG_MOVE_MULTIPLIER = 3.0      # 3x ATR move in one candle = skip
+COOLDOWN_MINUTES = 30          # skip trading for 30 minutes after shock
+
 
 
 # Helper indicator functions
@@ -485,11 +490,18 @@ def main():
     set_leverage(SYMBOL, LEVERAGE)
     position = get_open_position()
     logging.info(f"DEBUG: position returned: {position} (type: {type(position)})")
+    prev_side = position_side if 'position_side' in locals() else None
+    prev_tp = take_profit_price if 'take_profit_price' in locals() else None
     if position is None:
-        logging.info("No open position found.")
-        position_side = None
-        position_size = 0
-        entry_price = None
+        if prev_side:
+            logging.warning("⚠️ Position temporarily missing — keeping last known side & TP.")
+            position_side = prev_side
+            take_profit_price = prev_tp
+        else:
+            position_side = None
+            position_size = 0
+            entry_price = None
+
     else:
         # safe access using get()
         position_side = position.get('side')
@@ -511,6 +523,8 @@ def main():
     tp_set = False
     sl_set = False
     last_skip_reason = None  # track last skip reason to avoid log spam
+    skip_until = datetime.now() - timedelta(minutes=1)
+
 
     while True:
         try:
@@ -700,21 +714,19 @@ def main():
                 if detect_stop_hunt(last_1m, df_1m):  # df_1m already fetched
                     skip_trade = True
                     logging.info("Skip entry — stop-hunt candle detected.")
-            # --- Volatility Shock Filter ---
-            USE_VOLATILITY_SHOCK_FILTER = True
-            BIG_MOVE_MULTIPLIER = 3.0      # 3x ATR move in one candle = skip
-            COOLDOWN_MINUTES = 30          # skip trading for 30 minutes after shock
+            
 
             if USE_VOLATILITY_SHOCK_FILTER and not skip_trade:
                 # how much did last candle move compared to ATR?
                 move = abs(last_1m['close'] - last_1m['open'])
                 atr_now = df_1m['atr'].iloc[-1]
                 move_ratio = move / (atr_now + 1e-9)
+                direction = "UP" if last_1m['close'] > last_1m['open'] else "DOWN"
 
                 if move_ratio > BIG_MOVE_MULTIPLIER:
                     skip_trade = True
                     skip_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
-                    logging.info(f"🚨 Volatility shock detected! Move={move_ratio:.2f}×ATR → skipping new trades for {COOLDOWN_MINUTES} min.")
+                    logging.info(f"🚨 Volatility shock detected! {direction} move {move_ratio:.2f}×ATR → skipping new trades for {COOLDOWN_MINUTES} min.")
 
 
             # Final check → block trade here also
@@ -957,10 +969,12 @@ def main():
             
             # Check for exit conditions
             # Take Profit Check
+            current_price = fetch_last_price(SYMBOL)
+
             if position_side == 'long' and position_size > 0 and entry_price is not None:   
 
                 # Take Profit Check
-                if take_profit_price is not None and last_1m['close'] >= take_profit_price:
+                if take_profit_price is not None and current_price >= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing LONG")
                     
                     if tp_order:
@@ -1054,7 +1068,9 @@ def main():
                 if take_profit_price is None and position_size > 0 and entry_price is not None and atr_val is not None:
                     pass
                 # Take Profit Check
-                if take_profit_price is not None and last_1m['close'] <= take_profit_price:
+                current_price = fetch_last_price(SYMBOL)
+
+                if take_profit_price is not None and current_price <= take_profit_price:
                     print(f"{datetime.now()} - TP hit, closing SHORT at {last_1m['close']}")
                     pass
                     
@@ -1138,11 +1154,31 @@ def main():
                     # No position at all → skip stop loss logic completely
                     pass
 
+                if position_side and take_profit_price:
+                    current_price = fetch_last_price(SYMBOL)
 
+                    #Long TP hit
+                    if position_side == 'long' and current_price >= take_profit_price:
+                        print(f"⚡ Safety TP triggered — LONG closed at {current_price:.2f} ≥ {take_profit_price:.2f}")
+                        
+                        close_position_market('long', position_size)
+                        take_profit_price = None
+
+                    #Short TP hit
+                    elif position_side == 'short' and current_price <= take_profit_price:
+                        print(f"⚡ Safety TP triggered — SHORT closed at {current_price:.2f} ≤ {take_profit_price:.2f}")
+                        
+                        close_position_market('short', position_size)
+                        take_profit_price = None        
 
             
 
-            time.sleep(60)  # run once per minute
+            # Reduce loop delay when in trade
+            if position_side:
+                time.sleep(5)    # check every 5 seconds when in trade
+            else:
+                time.sleep(60)   # check once per minute when idle
+
 
         except Exception as e:
             print(f"Error in main loop: {e}")

@@ -1,0 +1,70 @@
+2025-10-23 00:07:53,655 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-10-23 00:07:53,755 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-10-23 00:07:53,756 - INFO - No open position found.
+2025-10-23 02:18:40,557 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2025-10-23 02:19:40,916 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2025-10-23 05:07:39,082 - INFO - [DI] Short setup +DI=8.37 -DI=40.35 ok=True
+2025-10-23 05:07:39,117 - INFO - [SIZE] px=3760.67 lev=50 -> qty=0.13
+2025-10-23 05:07:39,481 - INFO - Limit SELL order placed: Side=sell, Amount=0.13, Price=3764.5607999999997, ReduceOnly=False
+2025-10-23 05:10:06,131 - INFO - Limit BUY order placed: Side=buy, Amount=0.13, Price=3745.982857142857, ReduceOnly=True
+2025-10-23 05:10:06,133 - INFO - 🔒 FIXED ATR SL set for SHORT at 3783.14 (entry=3764.56, ATR=9.29, x2, take_profit=3745.98)
+2025-10-23 05:10:06,332 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:10:06,333 - INFO - 📉[INFO] ATR model level (not active SL): 3783.14
+2025-10-23 05:10:06,336 - INFO - 🔒 Fixed SL (protective): 3783.14
+2025-10-23 05:15:08,796 - INFO - [DI] Short setup +DI=5.99 -DI=49.00 ok=True
+2025-10-23 05:15:08,797 - INFO - Skip SHORT — overextended below EMA20 (0.51%).
+2025-10-23 05:16:09,326 - INFO - [DI] Short setup +DI=5.99 -DI=49.00 ok=True
+2025-10-23 05:16:09,326 - INFO - Skip SHORT — overextended below EMA20 (0.57%).
+2025-10-23 05:23:13,012 - INFO - [DI] Short setup +DI=5.48 -DI=45.17 ok=True
+2025-10-23 05:23:13,028 - INFO - [SIZE] px=3735.66 lev=50 -> qty=0.13
+2025-10-23 05:23:13,171 - INFO - Limit SELL order placed: Side=sell, Amount=0.13, Price=3739.7860499999997, ReduceOnly=False
+2025-10-23 05:25:14,087 - INFO - Limit SELL order placed: Side=sell, Amount=0.13, Price=3738.6749399999994, ReduceOnly=False
+2025-10-23 05:27:15,169 - INFO - Limit SELL order placed: Side=sell, Amount=0.13, Price=3735.2715399999997, ReduceOnly=False
+2025-10-23 05:29:16,122 - INFO - Limit SELL order placed: Side=sell, Amount=0.13, Price=3725.0813599999997, ReduceOnly=False
+2025-10-23 05:30:23,031 - INFO - Limit BUY order placed: Side=buy, Amount=0.13, Price=3710.9342857142856, ReduceOnly=True
+2025-10-23 05:30:23,033 - INFO - 🔒 FIXED ATR SL set for SHORT at 3739.23 (entry=3725.08, ATR=7.07, x2, take_profit=3710.93)
+2025-10-23 05:30:23,233 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:30:23,236 - INFO - 📉[INFO] ATR model level (not active SL): 3739.23
+2025-10-23 05:30:23,237 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:31:23,763 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:31:23,764 - INFO - 📉[INFO] ATR model level (not active SL): 3739.05
+2025-10-23 05:31:23,764 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:32:24,294 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:32:24,296 - INFO - 📉[INFO] ATR model level (not active SL): 3738.40
+2025-10-23 05:32:24,297 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:34:25,158 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:34:25,159 - INFO - 📉[INFO] ATR model level (not active SL): 3739.76
+2025-10-23 05:34:25,160 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:35:25,685 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:35:25,685 - INFO - 📉[INFO] ATR model level (not active SL): 3740.29
+2025-10-23 05:35:25,686 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:36:26,211 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 05:36:26,212 - INFO - 📉[INFO] ATR model level (not active SL): 3739.87
+2025-10-23 05:36:26,213 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 05:38:26,893 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.21)
+2025-10-23 07:27:04,204 - INFO - ✅ In a short position, size=0.13. Checking exit logic...
+2025-10-23 07:27:04,234 - INFO - 📉[INFO] ATR model level (not active SL): 3736.01
+2025-10-23 07:27:04,234 - INFO - 🔒 Fixed SL (protective): 3739.23
+2025-10-23 07:27:04,277 - INFO - 🛑 Market BUY to close short position: {'info': {'orderId': '55d5ffff-c7f7-487c-aecd-f77e9a7b36b1', 'orderLinkId': ''}, 'id': '55d5ffff-c7f7-487c-aecd-f77e9a7b36b1', 'clientOrderId': None, 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': 'ETH/USDT:USDT', 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': [], 'stopPrice': None}
+2025-10-23 07:28:04,807 - INFO - Skip entry — ADX 35.64 (prev 37.04) not strong+rising.
+2025-10-23 07:29:05,337 - INFO - Skip entry — ADX 35.64 (prev 37.04) not strong+rising.
+2025-10-23 07:58:17,527 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2025-10-23 14:30:31,691 - INFO - [DI] Long setup +DI=41.26 -DI=5.86 ok=True
+2025-10-23 14:30:31,729 - INFO - [SIZE] px=3880.55 lev=50 -> qty=0.12
+2025-10-23 14:30:31,835 - INFO - Limit BUY order placed: Side=buy, Amount=0.12, Price=3876.6694500000003, ReduceOnly=False
+2025-10-23 14:47:40,787 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.12)
+2025-10-23 14:48:41,136 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.26)
+2025-10-23 14:49:41,478 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.29)
+2025-10-23 14:51:42,509 - INFO - Limit SELL order placed: Side=sell, Amount=0.12, Price=3884.7542857142857, ReduceOnly=True
+2025-10-23 14:51:42,513 - INFO - 🔒 FIXED ATR SL set for LONG at 3868.59 (entry=3876.67, ATR=4.04, x2, take_profit=3884.75)
+2025-10-23 14:51:42,699 - INFO - ✅ In a long position, size=0.12. Checking exit logic...
+2025-10-23 14:51:42,700 - INFO - 📉[INFO] ATR model level (not active SL): 3868.59
+2025-10-23 14:51:42,702 - INFO - 🔒 Fixed SL (protective): 3868.59
+2025-10-23 14:52:43,039 - INFO - Skip entry — stop-hunt candle detected.
+2025-10-23 14:59:45,672 - INFO - ✅ In a long position, size=0.12. Checking exit logic...
+2025-10-23 14:59:45,687 - INFO - 📉[INFO] ATR model level (not active SL): 3867.06
+2025-10-23 14:59:45,688 - INFO - 🔒 Fixed SL (protective): 3868.59
+2025-10-23 20:06:33,507 - INFO - ✅ In a long position, size=0.12. Checking exit logic...
+2025-10-23 20:06:33,530 - INFO - 📉[INFO] ATR model level (not active SL): 3864.52
+2025-10-23 20:06:33,532 - INFO - 🔒 Fixed SL (protective): 3868.59
+2025-10-23 20:06:33,576 - INFO - 🛑 Market SELL to close long position: {'info': {'orderId': 'f4de0956-48dc-4c2a-9f2e-55fbe9583b5f', 'orderLinkId': ''}, 'id': 'f4de0956-48dc-4c2a-9f2e-55fbe9583b5f', 'clientOrderId': None, 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': 'ETH/USDT:USDT', 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': [], 'stopPrice': None}
