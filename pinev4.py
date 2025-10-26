@@ -63,7 +63,7 @@ market = exchange.market(SYMBOL)
 # Leverage setting
 LEVERAGE = 50
 TRADE_USDT = 10  # Amount of USDT to use per trade
-ATR_MULTIPLIER = 2
+ATR_MULTIPLIER = 1.5  # ATR multiplier for take profit calculation
 
 # Set leverage for the trading symbol
 def set_leverage(symbol, leverage):
