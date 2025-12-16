@@ -60,9 +60,9 @@ exchange = ccxt.bybit({
 exchange.load_markets()
 market = exchange.market(SYMBOL)
 
-# Leverage setting
+# Leverage setting  
 LEVERAGE = 50
-TRADE_USDT = 15  # Amount of USDT to use per trade
+TRADE_USDT = 30  # Amount of USDT to use per trade   
 ATR_MULTIPLIER = 3  # ATR multiplier for take profit calculation
 
 # Set leverage for the trading symbol
@@ -135,10 +135,19 @@ USE_STOP_HUNT_FILTER = True
 WICK_RATIO_THRESHOLD = 0.6   # wick > 60% of candle = stop hunt
 VOLUME_SPIKE_MULTIPLIER = 2  # volume > 2x median = suspicious
 
-# --- Volatility Shock Filter ---
+# ---  Volatility Shock Filter ---
 USE_VOLATILITY_SHOCK_FILTER = True
 BIG_MOVE_MULTIPLIER = 3.0      # 3x ATR move in one candle = skip
 COOLDOWN_MINUTES = 30          # skip trading for 30 minutes after shock
+
+# --- Entry Quality Filters ---
+USE_ENTRY_QUALITY_FILTERS = True
+EMA_SLOPE_WINDOW = 5
+MIN_EMA_SLOPE = 0.0005  # min 0.05% slope over window
+
+TRAP_LOOKBACK = 3
+PULLBACK_TOLERANCE = 0.0015  # 0.15% pullback allowed
+
 
 
 
@@ -598,7 +607,54 @@ def main():
             prev_1m = df_1m.iloc[-2]
             last_5m = df_5m.iloc[-1]
             prev_5m = df_5m.iloc[-2]
+            
+            # === NEW: EMA20 slope + trap + pullback info ===
+            ema20_series = df_1m['ema_fast']  # EMA20
 
+            if len(ema20_series) > EMA_SLOPE_WINDOW + 1:
+                ema20_start = ema20_series.iloc[-EMA_SLOPE_WINDOW-1]
+                ema20_end   = ema20_series.iloc[-1]
+                ema20_slope = (ema20_end - ema20_start) / max(abs(ema20_start), 1e-9)
+            else:
+                ema20_slope = 0.0  # not enough history yet
+
+
+            price_now   = last_1m['close']
+            price_prev  = prev_1m['close']
+            ema20_now   = last_1m['ema_fast']
+            ema50_now   = last_1m['ema_mid']
+            ema20_prev  = prev_1m['ema_fast']
+            ema50_prev  = prev_1m['ema_mid']
+
+            # Helper: is a candle "inside" the EMA20–EMA50 trap zone?
+            def in_trap_zone(px, e20, e50):
+                low  = min(e20, e50)
+                high = max(e20, e50)
+                return low <= px <= high
+
+            # If any of the last TRAP_LOOKBACK candles closed between EMA20 & EMA50 → chop zone
+            trap_recent = False
+            if len(df_1m) > TRAP_LOOKBACK + 2:
+                for i in range(1, TRAP_LOOKBACK + 1):
+                    c  = df_1m['close'].iloc[-i]
+                    e20 = df_1m['ema_fast'].iloc[-i]
+                    e50 = df_1m['ema_mid'].iloc[-i]
+                    if in_trap_zone(c, e20, e50):
+                        trap_recent = True
+                        break
+
+            # Pullback-timing filters:
+            # LONG: previous close "touches" EMA20, current close back above EMA20
+            long_pullback_ok = (
+                abs(price_prev - ema20_prev) <= ema20_prev * PULLBACK_TOLERANCE
+                and price_now > ema20_now
+            )
+
+            # SHORT: previous close "touches" EMA20, current close back below EMA20
+            short_pullback_ok = (
+                abs(price_prev - ema20_prev) <= ema20_prev * PULLBACK_TOLERANCE
+                and price_now < ema20_now
+            )
             # Conditions
             long_trend = (
                 df_1m['ema_fast'].iloc[-1] > df_1m['ema_mid'].iloc[-1] > df_1m['ema_slow'].iloc[-1] and
@@ -619,7 +675,11 @@ def main():
             price_above_emas = (
                 last_1m['close'] > last_1m['ema_fast'] and
                 last_1m['close'] > last_1m['ema_mid'] and
-                last_1m['close'] > last_1m['ema_slow']
+                last_1m['close'] > last_1m['ema_slow'] and
+                last_5m['close'] > last_5m['ema_fast'] and
+                last_5m['close'] > last_5m['ema_mid'] and
+                last_5m['close'] > last_5m['ema_slow']
+            
             )
             price_below_emas = (
                 last_1m['close'] < last_1m['ema_fast'] and
@@ -907,13 +967,29 @@ def main():
                     di_ok = (di_plus > di_minus + DI_BUFFER)
                     logging.info(f"[DI] Long setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
 
-
                     if USE_DI_GATE and not di_ok:
                         logging.info("Skip LONG — +DI not in favor.")
+
+                    # 🔹 NEW: Trend exhaustion filter (EMA20 slope must be strong enough)
+                    elif USE_ENTRY_QUALITY_FILTERS and ema20_slope <= MIN_EMA_SLOPE:
+                        logging.info(
+                            f"Skip LONG — EMA20 slope too weak ({ema20_slope*100:.2f}%). Trend likely exhausted."
+                        )
+
+                    # 🔹 Existing: overextension vs EMA20
                     elif stretch > 0.005:
                         logging.info(f"Skip LONG — overextended above EMA20 ({stretch*100:.2f}%).")
+
+                    # 🔹 NEW: avoid recent EMA20–50 trap
+                    elif USE_ENTRY_QUALITY_FILTERS and trap_recent:
+                        logging.info("Skip LONG — recent price action trapped between EMA20 & EMA50.")
+
+                    # 🔹 NEW: require clean pullback to EMA20 then continuation
+                    elif USE_ENTRY_QUALITY_FILTERS and not long_pullback_ok:
+                        logging.info("Skip LONG — no clean pullback & bounce from EMA20.")
+
                     else:
-                        # STEP 3: Adaptive sizing
+                        # STEP 3: Adaptive sizing (unchanged)
                         if USE_ADAPTIVE_SIZING:
                             atr_now = last_1m['atr']
                             atr_median = df_1m['atr'].rolling(100).median().iloc[-2]
@@ -932,41 +1008,55 @@ def main():
                             take_profit_price = None
 
                         if qty > 0:
-                            # Place entry limit order slightly below current price (e.g., 0.1% below market for long)
                             entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
-
                 elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
-                        #DI direction filter (sellers must dominate)
-                        di_ok = (di_minus > di_plus + DI_BUFFER)
-                        logging.info(f"[DI] Short setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
-                        if USE_DI_GATE and not di_ok:
-                            logging.info("Skip SHORT — -DI not in favor.")
-                        elif -stretch > 0.005:
-                            logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
+                    # DI direction filter (sellers must dominate)
+                    di_ok = (di_minus > di_plus + DI_BUFFER)
+                    logging.info(f"[DI] Short setup +DI={di_plus:.2f} -DI={di_minus:.2f} ok={di_ok}")
+
+                    if USE_DI_GATE and not di_ok:
+                        logging.info("Skip SHORT — -DI not in favor.")
+
+                    # 🔹 NEW: Trend exhaustion filter (EMA20 slope must be strongly negative)
+                    elif USE_ENTRY_QUALITY_FILTERS and ema20_slope >= -MIN_EMA_SLOPE:
+                        logging.info(
+                            f"Skip SHORT — EMA20 slope too weak ({ema20_slope*100:.2f}%). Downtrend likely exhausted."
+                        )
+
+                    # 🔹 Existing: overextension vs EMA20
+                    elif -stretch > 0.005:
+                        logging.info(f"Skip SHORT — overextended below EMA20 ({-stretch*100:.2f}%).")
+
+                    # 🔹 NEW: avoid recent EMA20–50 trap
+                    elif USE_ENTRY_QUALITY_FILTERS and trap_recent:
+                        logging.info("Skip SHORT — recent price action trapped between EMA20 & EMA50.")
+
+                    # 🔹 NEW: require clean pullback to EMA20 then continuation down
+                    elif USE_ENTRY_QUALITY_FILTERS and not short_pullback_ok:
+                        logging.info("Skip SHORT — no clean pullback & rejection from EMA20.")
+
+                    else:
+                        # STEP 3: Adaptive sizing (unchanged)
+                        if USE_ADAPTIVE_SIZING:
+                            atr_now = last_1m['atr']
+                            atr_median = df_1m['atr'].rolling(100).median().iloc[-2]
+                            scale = 1.0
+                            if atr_now > atr_median * VOL_SPIKE_MULTIPLIER:
+                                scale = MIN_POSITION_SCALE
+                                logging.info(f"Adaptive sizing: volatility spike, scaling down to {scale*100:.0f}% size.")
+                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT * scale, LEVERAGE)
                         else:
-                            # STEP 3: Adaptive sizing
-                            if USE_ADAPTIVE_SIZING:
-                                atr_now = last_1m['atr']
-                                atr_median = df_1m['atr'].rolling(100).median().iloc[-2]
-                                scale = 1.0
-                                if atr_now > atr_median * VOL_SPIKE_MULTIPLIER:
-                                    scale = MIN_POSITION_SCALE
-                                    logging.info(f"Adaptive sizing: volatility spike, scaling down to {scale*100:.0f}% size.")
-                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT * scale, LEVERAGE)
-                            else:
-                                qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
+                            qty = calculate_order_quantity(SYMBOL, last_1m['close'], TRADE_USDT, LEVERAGE)
 
-                            logging.info(f"[SIZE] px={last_1m['close']:.2f} lev={LEVERAGE} -> qty={qty}")
-                                
-                            if tp_order:
-                                cancel_order(tp_order['id'])
-                                tp_order = None
-                                take_profit_price = None
+                        logging.info(f"[SIZE] px={last_1m['close']:.2f} lev={LEVERAGE} -> qty={qty}")
 
-                            if qty > 0:
-                                # Place entry limit order slightly above current price (e.g., 0.1% above market for short)
-                                entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
-            
+                        if tp_order:
+                            cancel_order(tp_order['id'])
+                            tp_order = None
+                            take_profit_price = None
+
+                        if qty > 0:
+                            entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
             # Check for exit conditions
             # Take Profit Check
             current_price = fetch_last_price(SYMBOL)
