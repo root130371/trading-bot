@@ -256,3 +256,5 @@
 2026-01-22 01:14:08,246 - INFO - Skip SHORT — overextended below EMA20 (0.72%).
 2026-01-22 01:22:13,243 - INFO - [DI] Short setup +DI=5.80 -DI=35.88 ok=True
 2026-01-22 01:22:13,244 - INFO - Skip SHORT — recent price action trapped between EMA20 & EMA50.
+2026-01-22 01:23:13,879 - INFO - [DI] Short setup +DI=5.80 -DI=35.88 ok=True
+2026-01-22 01:23:13,880 - INFO - Skip SHORT — EMA20 slope too weak (-0.05%). Downtrend likely exhausted.
