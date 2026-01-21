@@ -1236,6 +1236,7 @@ def main():
                 #else:
                     ##neither RSI nor EMA triggered
                     #print(f"{datetime.now()} - Holding SHORT (RSI={rsi_val}, Trend={short_trend}, PriceBelowEMAs={price_below_emas})")
+                    #testgitworks
                
 
                 else:
