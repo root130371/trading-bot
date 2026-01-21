@@ -49,8 +49,8 @@ SYMBOL = 'ETH/USDT:USDT'
 
 # Configure Bybit API for real trading (use with caution)
 exchange = ccxt.bybit({
-    'apiKey': 'Z4JbKx0Ck80GhZI08A',
-    'secret': 'BJDFVGfR8WdPODBv864wXBJBSnu5liGIWqoG',
+    'apiKey': '',
+    'secret': '',
     'enableRateLimit': True,
     'options': {
         'defaultType': 'linear',
