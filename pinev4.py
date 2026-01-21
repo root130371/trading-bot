@@ -62,7 +62,7 @@ market = exchange.market(SYMBOL)
 
 # Leverage setting  
 LEVERAGE = 50
-TRADE_USDT = 50  # Amount of USDT to use per trade   
+TRADE_USDT = 100  # Amount of USDT to use per trade   
 ATR_MULTIPLIER = 3  # ATR multiplier for take profit calculation
 
 # Set leverage for the trading symbol
@@ -373,8 +373,26 @@ def retry_limit_order(side, qty, price_func, max_retries=20, max_cycles=6, wait_
             cancel_order(order_id)
         print(f"Cycle {cycle} ended without fill, moving to next cycle.")
 
+
     print(f"All {max_cycles} cycles and {max_retries} retries exhausted without fill.")
     return None
+
+def place_market_entry(side, amount):
+    try:
+        order = exchange.create_order(
+            symbol=SYMBOL,
+            type="market",
+            side=side,
+            amount=amount,
+            params={"reduceOnly": False}
+        )
+        logging.info(f"✅ MARKET ENTRY {side.upper()} placed: {order}")
+        print(f"✅ MARKET ENTRY {side.upper()} placed: {order}")
+        return {"id": order.get("id"), "raw": order}
+    except Exception as e:
+        logging.error(f"❌ Market entry error: {e}")
+        print(f"❌ Market entry error: {e}")
+        return None
 
 def close_position(side, amount):
     try:
@@ -1006,7 +1024,7 @@ def main():
                             take_profit_price = None
 
                         if qty > 0:
-                            entry_order = retry_limit_order('buy', qty, get_entry_price_long, post_only=True, reduce_only=False)
+                            entry_order = place_market_entry('buy', qty)
                 elif short_trend and price_below_emas and rsi_val > 30 and price_down_5m and price_down_1m:
                     # DI direction filter (sellers must dominate)
                     di_ok = (di_minus > di_plus + DI_BUFFER)
@@ -1054,7 +1072,7 @@ def main():
                             take_profit_price = None
 
                         if qty > 0:
-                            entry_order = retry_limit_order('sell', qty, get_entry_price_short, post_only=True, reduce_only=False)
+                            entry_order = place_market_entry('sell', qty)
             # Check for exit conditions
             # Take Profit Check
             current_price = fetch_last_price(SYMBOL)
