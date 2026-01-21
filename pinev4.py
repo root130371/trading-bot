@@ -818,9 +818,9 @@ def main():
 
 
             if entry_order:
-                status = get_order_status(entry_order['id'])
+                status = get_open_position
                 if status == 'closed':  # Entry filled
-                    print(f"Entry order filled: {entry_order['id']}")
+                    print(f"Entry order filled")
                     
                     
                     

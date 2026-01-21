@@ -1,0 +1,7 @@
+2026-01-22 01:25:22,641 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2026-01-22 01:25:22,736 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2026-01-22 01:25:23,175 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
+2026-01-22 01:26:23,501 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.30)
+2026-01-22 01:27:24,020 - INFO - [DI] Short setup +DI=5.58 -DI=33.86 ok=True
+2026-01-22 01:27:24,021 - INFO - Skip SHORT — EMA20 slope too weak (-0.04%). Downtrend likely exhausted.
+2026-01-22 01:28:24,451 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
