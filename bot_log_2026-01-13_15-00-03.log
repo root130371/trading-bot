@@ -1,0 +1,6 @@
+2026-01-13 15:00:07,678 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2026-01-13 15:00:07,851 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2026-01-14 00:10:33,532 - INFO - [DI] Long setup +DI=34.20 -DI=12.93 ok=True
+2026-01-14 00:10:33,560 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-14 00:11:42,390 - INFO - [DI] Long setup +DI=34.20 -DI=12.93 ok=True
+2026-01-14 00:11:42,391 - INFO - Skip LONG — no clean pullback & bounce from EMA20.

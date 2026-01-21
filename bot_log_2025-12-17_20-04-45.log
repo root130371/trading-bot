@@ -1,0 +1,87 @@
+2025-12-17 20:04:47,976 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-12-17 20:04:48,085 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-12-17 23:02:27,701 - INFO - Skip entry — ADX 29.15 (prev 29.71) not strong+rising.
+2025-12-17 23:03:28,448 - INFO - Skip entry — ADX 29.15 (prev 29.71) not strong+rising.
+2025-12-17 23:04:29,109 - INFO - Skip entry — ADX 29.15 (prev 29.71) not strong+rising.
+2025-12-17 23:05:31,362 - INFO - Skip entry — ADX 28.84 (prev 29.05) not strong+rising.
+2025-12-17 23:06:32,107 - INFO - Skip entry — ADX 28.84 (prev 29.05) not strong+rising.
+2025-12-17 23:07:32,847 - INFO - Skip entry — ADX 28.84 (prev 29.05) not strong+rising.
+2025-12-17 23:08:33,593 - INFO - Skip entry — ADX 28.84 (prev 29.05) not strong+rising.
+2025-12-17 23:09:34,339 - INFO - Skip entry — ADX 28.84 (prev 29.05) not strong+rising.
+2025-12-17 23:10:35,349 - INFO - [DI] Long setup +DI=37.91 -DI=16.80 ok=True
+2025-12-17 23:10:35,350 - INFO - Skip LONG — overextended above EMA20 (0.82%).
+2025-12-17 23:12:36,937 - INFO - [DI] Long setup +DI=37.91 -DI=16.80 ok=True
+2025-12-17 23:12:36,938 - INFO - Skip LONG — overextended above EMA20 (0.70%).
+2025-12-17 23:13:37,690 - INFO - [DI] Long setup +DI=37.91 -DI=16.80 ok=True
+2025-12-17 23:13:37,690 - INFO - Skip LONG — overextended above EMA20 (0.55%).
+2025-12-17 23:14:38,443 - INFO - [DI] Long setup +DI=37.91 -DI=16.80 ok=True
+2025-12-17 23:14:38,444 - INFO - Skip LONG — overextended above EMA20 (0.75%).
+2025-12-17 23:15:39,268 - INFO - [DI] Long setup +DI=35.15 -DI=15.57 ok=True
+2025-12-17 23:15:39,268 - INFO - Skip LONG — overextended above EMA20 (0.84%).
+2025-12-17 23:17:40,985 - INFO - [DI] Long setup +DI=35.15 -DI=15.57 ok=True
+2025-12-17 23:17:40,985 - INFO - Skip LONG — overextended above EMA20 (0.73%).
+2025-12-17 23:20:43,327 - INFO - [DI] Long setup +DI=33.82 -DI=14.58 ok=True
+2025-12-17 23:20:43,328 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-17 23:23:46,103 - INFO - [DI] Long setup +DI=33.82 -DI=14.58 ok=True
+2025-12-17 23:23:46,103 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-17 23:26:48,591 - INFO - [DI] Long setup +DI=32.11 -DI=14.20 ok=True
+2025-12-17 23:26:48,592 - INFO - Skip LONG — recent price action trapped between EMA20 & EMA50.
+2025-12-17 23:28:50,052 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.23)
+2025-12-17 23:29:50,536 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.18)
+2025-12-17 23:30:51,040 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.12)
+2025-12-17 23:31:51,523 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2025-12-17 23:32:51,955 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2025-12-17 23:33:52,438 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.02)
+2025-12-17 23:34:52,950 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.18)
+2025-12-17 23:42:57,078 - INFO - Skip entry — ADX 30.34 (prev 32.57) not strong+rising.
+2025-12-17 23:43:57,793 - INFO - Skip entry — ADX 30.34 (prev 32.57) not strong+rising.
+2025-12-17 23:44:58,244 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-17 23:45:58,754 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-17 23:46:59,489 - INFO - Skip entry — ADX 30.18 (prev 31.23) not strong+rising.
+2025-12-17 23:48:00,220 - INFO - Skip entry — ADX 30.18 (prev 31.23) not strong+rising.
+2025-12-17 23:49:00,968 - INFO - Skip entry — ADX 30.18 (prev 31.23) not strong+rising.
+2025-12-17 23:50:01,632 - INFO - Skip entry — ADX 30.28 (prev 30.73) not strong+rising.
+2025-12-18 00:15:19,617 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-18 00:35:35,610 - INFO - [DI] Short setup +DI=11.18 -DI=40.94 ok=True
+2025-12-18 00:35:35,611 - INFO - Skip SHORT — overextended below EMA20 (0.55%).
+2025-12-18 00:39:38,839 - INFO - [DI] Short setup +DI=11.18 -DI=40.94 ok=True
+2025-12-18 00:39:38,840 - INFO - Skip SHORT — overextended below EMA20 (0.52%).
+2025-12-18 00:49:47,009 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.19)
+2025-12-18 00:50:47,583 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2025-12-18 00:51:48,136 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.11)
+2025-12-18 00:52:48,683 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.06)
+2025-12-18 00:55:50,244 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2025-12-18 00:56:50,799 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.10)
+2025-12-18 01:04:55,246 - INFO - Skip entry — ADX 41.14 (prev 41.54) not strong+rising.
+2025-12-18 01:05:55,952 - INFO - Skip entry — ADX 40.35 (prev 41.17) not strong+rising.
+2025-12-18 01:06:56,666 - INFO - Skip entry — ADX 40.35 (prev 41.17) not strong+rising.
+2025-12-18 01:08:57,892 - INFO - Skip entry — ADX 40.35 (prev 41.17) not strong+rising.
+2025-12-18 01:09:58,359 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.24)
+2025-12-18 01:45:14,918 - INFO - Skip entry — ADX 30.81 (prev 31.47) not strong+rising.
+2025-12-18 01:46:15,598 - INFO - Skip entry — ADX 30.81 (prev 31.47) not strong+rising.
+2025-12-18 02:51:46,774 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-18 03:00:53,554 - INFO - [DI] Short setup +DI=11.10 -DI=32.35 ok=True
+2025-12-18 03:00:53,556 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-18 03:01:54,366 - INFO - [DI] Short setup +DI=11.10 -DI=32.35 ok=True
+2025-12-18 03:01:54,367 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-18 03:02:55,088 - INFO - [DI] Short setup +DI=11.10 -DI=32.35 ok=True
+2025-12-18 03:02:55,089 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-18 03:04:56,745 - INFO - [DI] Short setup +DI=11.10 -DI=32.35 ok=True
+2025-12-18 03:04:56,745 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-18 03:11:00,994 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-18 03:34:13,359 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.18)
+2025-12-18 03:35:13,768 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2025-12-18 03:36:14,174 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.14)
+2025-12-18 21:10:14,849 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-18 21:20:33,507 - INFO - [DI] Long setup +DI=41.25 -DI=5.97 ok=True
+2025-12-18 21:20:33,508 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-18 21:23:51,315 - INFO - [DI] Long setup +DI=41.25 -DI=5.97 ok=True
+2025-12-18 21:23:51,344 - INFO - [SIZE] px=2893.99 lev=50 -> qty=0.51
+2025-12-18 21:30:26,342 - INFO - [DI] Long setup +DI=36.67 -DI=9.08 ok=True
+2025-12-18 21:30:26,345 - INFO - Skip LONG — recent price action trapped between EMA20 & EMA50.
+2025-12-18 21:35:01,393 - INFO - [DI] Long setup +DI=36.67 -DI=9.08 ok=True
+2025-12-18 21:35:01,446 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-18 22:04:41,463 - INFO - [DI] Long setup +DI=50.61 -DI=3.18 ok=True
+2025-12-18 22:04:41,466 - INFO - Skip LONG — overextended above EMA20 (0.57%).
+2025-12-18 22:10:26,497 - INFO - [DI] Long setup +DI=46.11 -DI=2.60 ok=True
+2025-12-18 22:10:26,517 - INFO - [SIZE] px=2968.97 lev=50 -> qty=0.5

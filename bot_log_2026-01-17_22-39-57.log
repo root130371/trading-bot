@@ -1,0 +1,51 @@
+2026-01-17 22:39:59,269 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2026-01-17 22:39:59,350 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2026-01-19 07:39:58,572 - INFO - [DI] Short setup +DI=11.47 -DI=34.54 ok=True
+2026-01-19 07:39:58,575 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 07:40:59,182 - INFO - [DI] Short setup +DI=10.45 -DI=31.67 ok=True
+2026-01-19 07:40:59,183 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 07:43:00,404 - INFO - [DI] Short setup +DI=10.45 -DI=31.67 ok=True
+2026-01-19 07:43:00,407 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 07:44:01,340 - INFO - [DI] Short setup +DI=10.45 -DI=31.67 ok=True
+2026-01-19 07:44:01,340 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 07:46:02,279 - INFO - [DI] Short setup +DI=10.01 -DI=30.43 ok=True
+2026-01-19 07:46:02,280 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 07:53:06,630 - INFO - [DI] Short setup +DI=8.06 -DI=41.09 ok=True
+2026-01-19 07:53:06,631 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:00:10,980 - INFO - [DI] Short setup +DI=6.37 -DI=36.82 ok=True
+2026-01-19 08:00:10,981 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:05:14,082 - INFO - [DI] Short setup +DI=4.21 -DI=55.51 ok=True
+2026-01-19 08:05:14,083 - INFO - Skip SHORT — overextended below EMA20 (0.62%).
+2026-01-19 08:06:14,702 - INFO - [DI] Short setup +DI=4.21 -DI=55.51 ok=True
+2026-01-19 08:06:14,703 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:09:16,563 - INFO - [DI] Short setup +DI=4.21 -DI=55.51 ok=True
+2026-01-19 08:09:16,565 - INFO - Skip SHORT — overextended below EMA20 (0.54%).
+2026-01-19 08:10:17,183 - INFO - [DI] Short setup +DI=3.76 -DI=49.49 ok=True
+2026-01-19 08:10:17,184 - INFO - Skip SHORT — overextended below EMA20 (0.70%).
+2026-01-19 08:11:17,813 - INFO - [DI] Short setup +DI=3.76 -DI=49.49 ok=True
+2026-01-19 08:11:17,814 - INFO - Skip SHORT — overextended below EMA20 (0.73%).
+2026-01-19 08:13:19,047 - INFO - [DI] Short setup +DI=3.76 -DI=49.49 ok=True
+2026-01-19 08:13:19,048 - INFO - Skip SHORT — overextended below EMA20 (0.62%).
+2026-01-19 08:14:19,665 - INFO - [DI] Short setup +DI=3.76 -DI=49.49 ok=True
+2026-01-19 08:14:19,666 - INFO - Skip SHORT — overextended below EMA20 (0.91%).
+2026-01-19 08:18:22,157 - INFO - [DI] Short setup +DI=3.26 -DI=52.38 ok=True
+2026-01-19 08:18:22,158 - INFO - Skip SHORT — overextended below EMA20 (0.99%).
+2026-01-19 08:20:23,402 - INFO - [DI] Short setup +DI=2.93 -DI=53.41 ok=True
+2026-01-19 08:20:23,403 - INFO - Skip SHORT — overextended below EMA20 (0.78%).
+2026-01-19 08:24:25,878 - INFO - [DI] Short setup +DI=2.93 -DI=53.41 ok=True
+2026-01-19 08:24:25,879 - INFO - Skip SHORT — overextended below EMA20 (0.65%).
+2026-01-19 08:25:26,493 - INFO - [DI] Short setup +DI=2.47 -DI=56.03 ok=True
+2026-01-19 08:25:26,494 - INFO - Skip SHORT — overextended below EMA20 (0.86%).
+2026-01-19 08:27:27,744 - INFO - [DI] Short setup +DI=2.47 -DI=56.03 ok=True
+2026-01-19 08:27:27,745 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:28:28,356 - INFO - [DI] Short setup +DI=2.47 -DI=56.03 ok=True
+2026-01-19 08:28:28,356 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:30:29,593 - INFO - [DI] Short setup +DI=2.24 -DI=50.81 ok=True
+2026-01-19 08:30:29,594 - INFO - Skip SHORT — overextended below EMA20 (0.77%).
+2026-01-19 08:35:32,688 - INFO - [DI] Short setup +DI=2.02 -DI=47.84 ok=True
+2026-01-19 08:35:32,688 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-19 08:39:34,979 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.23)
+2026-01-19 08:40:35,302 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2026-01-19 08:41:35,649 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2026-01-19 08:45:36,968 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.21)
+2026-01-19 08:46:37,296 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.26)

@@ -62,7 +62,7 @@ market = exchange.market(SYMBOL)
 
 # Leverage setting  
 LEVERAGE = 50
-TRADE_USDT = 30  # Amount of USDT to use per trade   
+TRADE_USDT = 50  # Amount of USDT to use per trade   
 ATR_MULTIPLIER = 3  # ATR multiplier for take profit calculation
 
 # Set leverage for the trading symbol
@@ -642,29 +642,30 @@ def main():
                     if in_trap_zone(c, e20, e50):
                         trap_recent = True
                         break
-
+            
             # Pullback-timing filters:
             # LONG: previous close "touches" EMA20, current close back above EMA20
+            # Use LAST CLOSED candle only
+            pb = df_1m.iloc[-2]
+            ema20_pb = df_1m['ema_fast'].iloc[-2]
             long_pullback_ok = (
-                abs(price_prev - ema20_prev) <= ema20_prev * PULLBACK_TOLERANCE
-                and price_now > ema20_now
+                pb['low'] <= ema20_pb #wick touched or pierced ema20
+                and pb['close'] > ema20_pb #candle reclaimed ema20
             )
 
             # SHORT: previous close "touches" EMA20, current close back below EMA20
             short_pullback_ok = (
-                abs(price_prev - ema20_prev) <= ema20_prev * PULLBACK_TOLERANCE
-                and price_now < ema20_now
+                pb['high'] >= ema20_pb #wick touched or pierced ema20
+                and pb['close'] < ema20_pb #candle reclaimed ema20
             )
             # Conditions
             long_trend = (
                 df_1m['ema_fast'].iloc[-1] > df_1m['ema_mid'].iloc[-1] > df_1m['ema_slow'].iloc[-1] and
-                df_5m['ema_fast'].iloc[-1] > df_5m['ema_mid'].iloc[-1] > df_5m['ema_slow'].iloc[-1] and
-                df_1h['ema_fast'].iloc[-1] > df_1h['ema_mid'].iloc[-1] > df_1h['ema_slow'].iloc[-1]
+                df_5m['ema_fast'].iloc[-1] > df_5m['ema_mid'].iloc[-1] > df_5m['ema_slow'].iloc[-1] 
             )
             short_trend = (
                 df_1m['ema_fast'].iloc[-1] < df_1m['ema_mid'].iloc[-1] < df_1m['ema_slow'].iloc[-1] and
-                df_5m['ema_fast'].iloc[-1] < df_5m['ema_mid'].iloc[-1] < df_5m['ema_slow'].iloc[-1] and
-                df_1h['ema_fast'].iloc[-1] < df_1h['ema_mid'].iloc[-1] < df_1h['ema_slow'].iloc[-1]
+                df_5m['ema_fast'].iloc[-1] < df_5m['ema_mid'].iloc[-1] < df_5m['ema_slow'].iloc[-1]
             )
 
             price_up_5m = last_5m['close'] > prev_5m['close']
@@ -675,10 +676,7 @@ def main():
             price_above_emas = (
                 last_1m['close'] > last_1m['ema_fast'] and
                 last_1m['close'] > last_1m['ema_mid'] and
-                last_1m['close'] > last_1m['ema_slow'] and
-                last_5m['close'] > last_5m['ema_fast'] and
-                last_5m['close'] > last_5m['ema_mid'] and
-                last_5m['close'] > last_5m['ema_slow']
+                last_1m['close'] > last_1m['ema_slow']
             
             )
             price_below_emas = (

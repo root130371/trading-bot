@@ -1,0 +1,8 @@
+2025-12-16 19:01:27,729 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-12-16 19:01:27,829 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-12-16 22:01:57,693 - INFO - Skip entry — ADX 21.37 (prev 20.63) not strong+rising.
+2025-12-16 22:02:58,223 - INFO - Skip entry — ADX 21.37 (prev 20.63) not strong+rising.
+2025-12-16 22:03:58,577 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-16 22:04:59,115 - INFO - Skip entry — ADX 21.37 (prev 20.63) not strong+rising.
+2025-12-16 22:05:59,656 - INFO - Skip entry — ADX 23.08 (prev 21.37) not strong+rising.
+2025-12-16 22:12:01,955 - INFO - Skip entry — ADX 24.26 (prev 23.61) not strong+rising.

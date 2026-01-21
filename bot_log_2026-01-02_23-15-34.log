@@ -1,0 +1,76 @@
+2026-01-02 23:15:35,853 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2026-01-02 23:15:35,946 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2026-01-02 23:39:44,353 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.19)
+2026-01-02 23:40:44,901 - INFO - Skip entry — ADX 23.24 (prev 23.39) not strong+rising.
+2026-01-02 23:41:45,430 - INFO - Skip entry — ADX 23.24 (prev 23.39) not strong+rising.
+2026-01-02 23:42:45,958 - INFO - Skip entry — ADX 23.24 (prev 23.39) not strong+rising.
+2026-01-02 23:43:46,480 - INFO - Skip entry — ADX 23.24 (prev 23.39) not strong+rising.
+2026-01-02 23:44:47,026 - INFO - Skip entry — ADX 23.24 (prev 23.39) not strong+rising.
+2026-01-02 23:45:47,551 - INFO - Skip entry — ADX 23.62 (prev 23.25) not strong+rising.
+2026-01-02 23:46:48,074 - INFO - Skip entry — ADX 23.62 (prev 23.25) not strong+rising.
+2026-01-02 23:47:48,596 - INFO - Skip entry — ADX 23.62 (prev 23.25) not strong+rising.
+2026-01-02 23:48:49,117 - INFO - Skip entry — ADX 23.62 (prev 23.25) not strong+rising.
+2026-01-02 23:49:49,639 - INFO - Skip entry — ADX 23.62 (prev 23.25) not strong+rising.
+2026-01-03 00:14:58,359 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2026-01-03 00:15:58,776 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2026-01-03 00:16:59,112 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.16)
+2026-01-03 00:17:59,447 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.29)
+2026-01-03 00:18:59,971 - INFO - Skip entry — ADX 22.78 (prev 22.83) not strong+rising.
+2026-01-03 00:23:01,964 - INFO - Skip entry — ADX 23.99 (prev 22.78) not strong+rising.
+2026-01-03 00:24:02,495 - INFO - Skip entry — ADX 23.99 (prev 22.78) not strong+rising.
+2026-01-03 00:59:19,699 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2026-01-03 01:00:20,023 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2026-01-03 01:01:20,352 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.10)
+2026-01-03 01:02:21,035 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.09)
+2026-01-03 01:03:21,356 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2026-01-03 01:04:21,685 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2026-01-03 01:05:22,027 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2026-01-03 01:06:22,368 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2026-01-03 01:07:22,705 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.23)
+2026-01-03 01:08:23,034 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.29)
+2026-01-03 01:13:25,870 - INFO - [DI] Long setup +DI=30.15 -DI=11.69 ok=True
+2026-01-03 01:13:25,891 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-03 01:15:26,809 - INFO - [DI] Long setup +DI=28.23 -DI=12.66 ok=True
+2026-01-03 01:15:26,936 - INFO - [SIZE] px=3140.24 lev=50 -> qty=1.11
+2026-01-03 01:19:47,763 - INFO - [DI] Long setup +DI=28.23 -DI=12.66 ok=True
+2026-01-03 01:19:47,763 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-03 01:20:48,393 - INFO - [DI] Long setup +DI=29.66 -DI=11.89 ok=True
+2026-01-03 01:20:48,393 - INFO - [SIZE] px=3142.21 lev=50 -> qty=1.11
+2026-01-03 02:55:40,854 - INFO - Skip entry — ADX 19.37 (prev 18.84) not strong+rising.
+2026-01-05 09:36:08,798 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2026-01-05 09:37:09,590 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2026-01-05 09:38:10,248 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.05)
+2026-01-05 09:39:10,583 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2026-01-05 09:40:10,926 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.23)
+2026-01-05 23:45:56,298 - INFO - Skip entry — ADX 24.68 (prev 23.34) not strong+rising.
+2026-01-05 23:46:56,886 - INFO - Skip entry — ADX 24.68 (prev 23.34) not strong+rising.
+2026-01-05 23:47:57,405 - INFO - Skip entry — ADX 24.68 (prev 23.34) not strong+rising.
+2026-01-05 23:48:57,922 - INFO - Skip entry — ADX 24.68 (prev 23.34) not strong+rising.
+2026-01-05 23:49:58,444 - INFO - Skip entry — ADX 24.68 (prev 23.34) not strong+rising.
+2026-01-06 00:00:03,348 - INFO - [DI] Long setup +DI=29.27 -DI=11.45 ok=True
+2026-01-06 00:00:03,348 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-06 00:03:04,621 - INFO - [DI] Long setup +DI=29.27 -DI=11.45 ok=True
+2026-01-06 00:03:04,708 - INFO - [SIZE] px=3196.00 lev=50 -> qty=1.09
+2026-01-06 02:15:07,124 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.19)
+2026-01-06 02:59:22,034 - INFO - Skip entry — ADX 24.52 (prev 24.13) not strong+rising.
+2026-01-06 22:24:55,020 - INFO - Skip entry — stop-hunt candle detected.
+2026-01-06 22:35:01,613 - INFO - [DI] Long setup +DI=43.42 -DI=13.14 ok=True
+2026-01-06 22:35:01,723 - INFO - [SIZE] px=3292.98 lev=50 -> qty=1.06
+2026-01-06 22:36:20,359 - INFO - [DI] Long setup +DI=43.42 -DI=13.14 ok=True
+2026-01-06 22:36:20,377 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-06 22:38:21,606 - INFO - [DI] Long setup +DI=43.42 -DI=13.14 ok=True
+2026-01-06 22:38:21,607 - INFO - [SIZE] px=3295.43 lev=50 -> qty=1.06
+2026-01-06 22:39:40,325 - INFO - [DI] Long setup +DI=43.42 -DI=13.14 ok=True
+2026-01-06 22:39:40,325 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-06 23:22:55,935 - INFO - Skip entry — ADX 29.56 (prev 31.14) not strong+rising.
+2026-01-06 23:26:57,447 - INFO - Skip entry — ADX 29.07 (prev 29.72) not strong+rising.
+2026-01-06 23:27:57,967 - INFO - Skip entry — ADX 29.07 (prev 29.72) not strong+rising.
+2026-01-07 05:30:09,520 - INFO - [DI] Long setup +DI=44.20 -DI=9.01 ok=True
+2026-01-07 05:30:09,529 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-07 05:31:10,130 - INFO - [DI] Long setup +DI=44.20 -DI=9.01 ok=True
+2026-01-07 05:31:10,131 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-07 05:33:11,365 - INFO - [DI] Long setup +DI=44.20 -DI=9.01 ok=True
+2026-01-07 05:33:11,366 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-07 05:34:11,981 - INFO - [DI] Long setup +DI=44.20 -DI=9.01 ok=True
+2026-01-07 05:34:11,982 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2026-01-07 09:20:33,597 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.27)

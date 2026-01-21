@@ -1,0 +1,553 @@
+2025-12-18 22:16:19,535 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2025-12-18 22:16:19,636 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2025-12-18 22:18:20,800 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2025-12-18 22:19:21,141 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2025-12-18 22:20:21,509 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.11)
+2025-12-18 22:21:21,870 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.14)
+2025-12-18 22:22:22,217 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.15)
+2025-12-18 22:23:22,543 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.16)
+2025-12-18 22:31:30,409 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.10)
+2025-12-18 22:32:31,024 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2025-12-18 23:08:06,673 - INFO - Skip entry — ADX 49.90 (prev 51.62) not strong+rising.
+2025-12-19 01:05:48,750 - INFO - Skip entry — ADX 24.57 (prev 24.93) not strong+rising.
+2025-12-19 01:06:49,287 - INFO - Skip entry — ADX 24.57 (prev 24.93) not strong+rising.
+2025-12-19 01:07:49,823 - INFO - Skip entry — ADX 24.57 (prev 24.93) not strong+rising.
+2025-12-19 01:08:50,360 - INFO - Skip entry — ADX 24.57 (prev 24.93) not strong+rising.
+2025-12-19 01:09:50,898 - INFO - Skip entry — ADX 24.57 (prev 24.93) not strong+rising.
+2025-12-19 01:30:03,733 - INFO - [DI] Short setup +DI=8.59 -DI=43.49 ok=True
+2025-12-19 01:30:03,734 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-19 01:31:04,347 - INFO - [DI] Short setup +DI=8.59 -DI=43.49 ok=True
+2025-12-19 01:31:04,347 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-19 01:32:04,970 - INFO - [DI] Short setup +DI=8.59 -DI=43.49 ok=True
+2025-12-19 01:32:04,971 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-19 01:33:05,584 - INFO - [DI] Short setup +DI=8.59 -DI=43.49 ok=True
+2025-12-19 01:33:05,584 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-19 01:39:09,122 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.22)
+2025-12-19 01:40:09,464 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.13)
+2025-12-19 01:41:09,785 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.04)
+2025-12-19 01:42:10,111 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2025-12-19 01:43:10,443 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.07)
+2025-12-19 01:44:10,782 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.26)
+2025-12-19 02:03:20,228 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.08)
+2025-12-19 03:38:51,385 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.12)
+2025-12-19 03:43:53,224 - INFO - Skip entry — ADX 39.84 (prev 39.98) not strong+rising.
+2025-12-19 03:44:53,757 - INFO - Skip entry — ADX 39.84 (prev 39.98) not strong+rising.
+2025-12-19 03:52:58,414 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-19 04:00:02,665 - INFO - [DI] Short setup +DI=8.33 -DI=30.64 ok=True
+2025-12-19 04:00:02,666 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-19 04:35:15,171 - INFO - Skip entry — ADX 42.62 (prev 42.78) not strong+rising.
+2025-12-19 05:34:34,651 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-19 05:35:35,176 - INFO - Skip entry — ADX 29.46 (prev 29.65) not strong+rising.
+2025-12-19 05:36:35,713 - INFO - Skip entry — ADX 29.46 (prev 29.65) not strong+rising.
+2025-12-19 05:37:36,237 - INFO - Skip entry — ADX 29.46 (prev 29.65) not strong+rising.
+2025-12-19 05:38:36,757 - INFO - Skip entry — ADX 29.46 (prev 29.65) not strong+rising.
+2025-12-19 05:58:43,236 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.02)
+2025-12-19 06:00:43,886 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.07)
+2025-12-19 06:05:45,992 - INFO - [DI] Long setup +DI=26.47 -DI=12.69 ok=True
+2025-12-19 06:05:45,993 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-19 06:08:47,844 - INFO - [DI] Long setup +DI=26.47 -DI=12.69 ok=True
+2025-12-19 06:08:47,845 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-19 06:09:48,461 - INFO - [DI] Long setup +DI=26.47 -DI=12.69 ok=True
+2025-12-19 06:09:48,461 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-19 11:08:28,015 - INFO - Skip entry — ADX 22.45 (prev 20.12) not strong+rising.
+2025-12-19 11:09:28,541 - INFO - Skip entry — ADX 22.45 (prev 20.12) not strong+rising.
+2025-12-19 11:11:29,403 - INFO - Skip entry — ADX 24.81 (prev 22.45) not strong+rising.
+2025-12-19 11:12:29,924 - INFO - Skip entry — ADX 24.81 (prev 22.45) not strong+rising.
+2025-12-19 11:13:30,444 - INFO - Skip entry — ADX 24.81 (prev 22.45) not strong+rising.
+2025-12-19 11:14:30,966 - INFO - Skip entry — ADX 24.81 (prev 22.45) not strong+rising.
+2025-12-19 11:22:35,328 - INFO - [DI] Long setup +DI=32.67 -DI=6.80 ok=True
+2025-12-19 11:22:35,329 - INFO - Skip LONG — EMA20 slope too weak (0.04%). Trend likely exhausted.
+2025-12-19 11:23:35,937 - INFO - [DI] Long setup +DI=32.67 -DI=6.80 ok=True
+2025-12-19 11:23:35,938 - INFO - Skip LONG — EMA20 slope too weak (0.04%). Trend likely exhausted.
+2025-12-19 11:24:36,569 - INFO - [DI] Long setup +DI=32.67 -DI=6.80 ok=True
+2025-12-19 11:24:36,570 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-19 11:30:40,084 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-19 11:32:41,025 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-19 11:52:53,133 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.27)
+2025-12-19 11:53:53,463 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.22)
+2025-12-19 11:54:53,801 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2025-12-19 11:55:54,142 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.12)
+2025-12-19 11:58:55,154 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2025-12-19 11:59:55,501 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2025-12-19 12:00:55,836 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.02)
+2025-12-19 12:01:56,188 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.07)
+2025-12-19 12:02:56,526 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.16)
+2025-12-19 12:03:56,847 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
+2025-12-19 12:04:57,370 - INFO - Skip entry — ADX 38.48 (prev 39.45) not strong+rising.
+2025-12-19 12:05:57,720 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
+2025-12-19 12:06:58,062 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.24)
+2025-12-19 12:07:58,398 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.18)
+2025-12-19 12:08:58,723 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2025-12-19 12:09:59,045 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2025-12-19 12:10:59,381 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.25)
+2025-12-19 12:11:59,721 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.27)
+2025-12-19 12:13:00,257 - INFO - Skip entry — ADX 37.43 (prev 37.85) not strong+rising.
+2025-12-19 12:14:00,785 - INFO - Skip entry — ADX 37.43 (prev 37.85) not strong+rising.
+2025-12-19 12:15:01,109 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.29)
+2025-12-19 12:16:01,629 - INFO - Skip entry — ADX 37.34 (prev 37.63) not strong+rising.
+2025-12-19 12:17:02,149 - INFO - Skip entry — ADX 37.34 (prev 37.63) not strong+rising.
+2025-12-19 12:18:02,669 - INFO - Skip entry — ADX 37.34 (prev 37.63) not strong+rising.
+2025-12-19 12:19:03,204 - INFO - Skip entry — ADX 37.34 (prev 37.63) not strong+rising.
+2025-12-19 12:20:03,729 - INFO - Skip entry — ADX 36.79 (prev 37.54) not strong+rising.
+2025-12-19 12:21:04,250 - INFO - Skip entry — ADX 36.79 (prev 37.54) not strong+rising.
+2025-12-19 12:26:06,112 - INFO - Skip entry — ADX 35.91 (prev 36.94) not strong+rising.
+2025-12-19 15:08:00,074 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-19 15:15:04,317 - INFO - [DI] Long setup +DI=48.18 -DI=7.54 ok=True
+2025-12-19 15:15:04,318 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-20 02:04:02,863 - INFO - Skip entry — ADX 23.22 (prev 22.17) not strong+rising.
+2025-12-20 02:05:03,398 - INFO - Skip entry — ADX 24.48 (prev 23.52) not strong+rising.
+2025-12-20 02:08:04,566 - INFO - Skip entry — ADX 24.48 (prev 23.52) not strong+rising.
+2025-12-20 02:09:05,090 - INFO - Skip entry — ADX 24.48 (prev 23.52) not strong+rising.
+2025-12-20 03:37:34,595 - INFO - Skip entry — ADX 19.78 (prev 19.15) not strong+rising.
+2025-12-20 03:38:35,122 - INFO - Skip entry — ADX 19.78 (prev 19.15) not strong+rising.
+2025-12-20 03:39:35,641 - INFO - Skip entry — ADX 19.78 (prev 19.15) not strong+rising.
+2025-12-20 03:43:37,164 - INFO - Skip entry — ADX 21.01 (prev 19.82) not strong+rising.
+2025-12-20 03:48:38,992 - INFO - Skip entry — ADX 23.00 (prev 21.94) not strong+rising.
+2025-12-20 03:49:39,517 - INFO - Skip entry — ADX 23.00 (prev 21.94) not strong+rising.
+2025-12-21 21:28:19,081 - INFO - [DI] Short setup +DI=9.97 -DI=41.50 ok=True
+2025-12-21 21:28:19,119 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-21 21:35:24,666 - INFO - [DI] Short setup +DI=7.43 -DI=51.64 ok=True
+2025-12-21 21:35:24,668 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-21 21:36:25,312 - INFO - [DI] Short setup +DI=7.43 -DI=51.64 ok=True
+2025-12-21 21:36:25,313 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-22 08:27:19,992 - INFO - [DI] Long setup +DI=45.61 -DI=11.64 ok=True
+2025-12-22 08:27:20,006 - INFO - Skip LONG — EMA20 slope too weak (0.03%). Trend likely exhausted.
+2025-12-22 08:29:20,926 - INFO - [DI] Long setup +DI=45.61 -DI=11.64 ok=True
+2025-12-22 08:29:20,927 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-22 08:38:24,035 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.02)
+2025-12-22 08:39:24,363 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2025-12-22 08:40:24,696 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2025-12-22 08:41:25,029 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2025-12-22 09:36:43,236 - INFO - [DI] Long setup +DI=29.93 -DI=7.53 ok=True
+2025-12-22 09:36:43,237 - INFO - Skip LONG — no clean pullback & bounce from EMA20.
+2025-12-22 10:14:56,002 - INFO - Skip entry — ADX 47.77 (prev 48.16) not strong+rising.
+2025-12-22 10:15:56,526 - INFO - Skip entry — ADX 47.41 (prev 47.77) not strong+rising.
+2025-12-22 10:16:57,045 - INFO - Skip entry — ADX 47.41 (prev 47.77) not strong+rising.
+2025-12-22 10:17:57,572 - INFO - Skip entry — ADX 47.41 (prev 47.77) not strong+rising.
+2025-12-22 10:18:58,093 - INFO - Skip entry — ADX 47.41 (prev 47.77) not strong+rising.
+2025-12-22 10:19:58,614 - INFO - Skip entry — ADX 47.41 (prev 47.77) not strong+rising.
+2025-12-22 10:20:59,136 - INFO - Skip entry — ADX 47.41 (prev 47.83) not strong+rising.
+2025-12-22 10:21:59,670 - INFO - Skip entry — ADX 47.41 (prev 47.83) not strong+rising.
+2025-12-23 03:25:50,657 - INFO - [DI] Short setup +DI=7.05 -DI=29.47 ok=True
+2025-12-23 03:25:50,667 - INFO - Skip SHORT — EMA20 slope too weak (-0.05%). Downtrend likely exhausted.
+2025-12-23 03:26:51,272 - INFO - [DI] Short setup +DI=7.05 -DI=29.47 ok=True
+2025-12-23 03:26:51,272 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-23 03:27:51,689 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-23 03:30:53,246 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-23 03:34:55,611 - INFO - [DI] Short setup +DI=6.08 -DI=39.34 ok=True
+2025-12-23 03:34:55,628 - INFO - [SIZE] px=2985.00 lev=50 -> qty=0.5
+2025-12-23 03:34:56,006 - INFO - Limit SELL order placed: Side=sell, Amount=0.5, Price=2988.4154299999996, ReduceOnly=False
+2025-12-23 03:36:56,392 - INFO - Limit SELL order placed: Side=sell, Amount=0.5, Price=2986.82384, ReduceOnly=False
+2025-12-23 03:40:24,338 - INFO - Limit BUY order placed: Side=buy, Amount=0.5, Price=2972.152142857143, ReduceOnly=True
+2025-12-23 03:40:24,339 - INFO - 🔒 FIXED ATR SL set for SHORT at 3001.49 (entry=2986.82, ATR=4.89, x3, take_profit=2972.15)
+2025-12-23 03:40:24,549 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:40:24,550 - INFO - 📉[INFO] ATR model level (not active SL): 3001.49
+2025-12-23 03:40:24,551 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:41:30,579 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:41:30,579 - INFO - 📉[INFO] ATR model level (not active SL): 3000.19
+2025-12-23 03:41:30,580 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:41:36,294 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:41:36,295 - INFO - 📉[INFO] ATR model level (not active SL): 3000.19
+2025-12-23 03:41:36,295 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:41:42,026 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:41:42,027 - INFO - 📉[INFO] ATR model level (not active SL): 3000.19
+2025-12-23 03:41:42,027 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:41:47,725 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:41:47,725 - INFO - 📉[INFO] ATR model level (not active SL): 3000.20
+2025-12-23 03:41:47,726 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:45:54,735 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:45:54,735 - INFO - 📉[INFO] ATR model level (not active SL): 2999.01
+2025-12-23 03:45:54,736 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:46:00,452 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:46:00,452 - INFO - 📉[INFO] ATR model level (not active SL): 2999.09
+2025-12-23 03:46:00,453 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:48:06,820 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:48:06,820 - INFO - 📉[INFO] ATR model level (not active SL): 2997.36
+2025-12-23 03:48:06,820 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:48:12,549 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:48:12,550 - INFO - 📉[INFO] ATR model level (not active SL): 2997.36
+2025-12-23 03:48:12,551 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:49:18,419 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-23 03:50:18,938 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:18,938 - INFO - 📉[INFO] ATR model level (not active SL): 2997.89
+2025-12-23 03:50:18,938 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:24,658 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:24,659 - INFO - 📉[INFO] ATR model level (not active SL): 2997.89
+2025-12-23 03:50:24,659 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:30,374 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:30,374 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:30,375 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:36,091 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:36,091 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:36,091 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:41,810 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:41,811 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:41,811 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:47,524 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:47,524 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:47,524 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:53,258 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:53,258 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:53,259 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:50:58,961 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:50:58,961 - INFO - 📉[INFO] ATR model level (not active SL): 2998.66
+2025-12-23 03:50:58,961 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:04,694 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:04,695 - INFO - 📉[INFO] ATR model level (not active SL): 2997.52
+2025-12-23 03:51:04,695 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:10,421 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:10,421 - INFO - 📉[INFO] ATR model level (not active SL): 2997.55
+2025-12-23 03:51:10,421 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:16,136 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:16,137 - INFO - 📉[INFO] ATR model level (not active SL): 2997.66
+2025-12-23 03:51:16,137 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:21,858 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:21,858 - INFO - 📉[INFO] ATR model level (not active SL): 2997.79
+2025-12-23 03:51:21,858 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:27,576 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:27,576 - INFO - 📉[INFO] ATR model level (not active SL): 2998.13
+2025-12-23 03:51:27,577 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:33,298 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:33,299 - INFO - 📉[INFO] ATR model level (not active SL): 2998.26
+2025-12-23 03:51:33,300 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:39,009 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:39,010 - INFO - 📉[INFO] ATR model level (not active SL): 2998.26
+2025-12-23 03:51:39,010 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:44,729 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:44,731 - INFO - 📉[INFO] ATR model level (not active SL): 2998.26
+2025-12-23 03:51:44,732 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:50,448 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:50,449 - INFO - 📉[INFO] ATR model level (not active SL): 2998.26
+2025-12-23 03:51:50,449 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:51:56,167 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:51:56,168 - INFO - 📉[INFO] ATR model level (not active SL): 2998.26
+2025-12-23 03:51:56,169 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:01,884 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:01,884 - INFO - 📉[INFO] ATR model level (not active SL): 2997.61
+2025-12-23 03:52:01,884 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:07,600 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:07,601 - INFO - 📉[INFO] ATR model level (not active SL): 2997.73
+2025-12-23 03:52:07,603 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:13,318 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:13,318 - INFO - 📉[INFO] ATR model level (not active SL): 2997.73
+2025-12-23 03:52:13,318 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:19,037 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:19,038 - INFO - 📉[INFO] ATR model level (not active SL): 2997.95
+2025-12-23 03:52:19,038 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:24,758 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:24,759 - INFO - 📉[INFO] ATR model level (not active SL): 2997.95
+2025-12-23 03:52:24,759 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:30,484 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:30,485 - INFO - 📉[INFO] ATR model level (not active SL): 2997.95
+2025-12-23 03:52:30,486 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:36,193 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:36,193 - INFO - 📉[INFO] ATR model level (not active SL): 2998.14
+2025-12-23 03:52:36,193 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:41,914 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:41,914 - INFO - 📉[INFO] ATR model level (not active SL): 2998.14
+2025-12-23 03:52:41,914 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:52:47,632 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:52:47,633 - INFO - 📉[INFO] ATR model level (not active SL): 2998.16
+2025-12-23 03:52:47,633 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:53:53,671 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:53:53,671 - INFO - 📉[INFO] ATR model level (not active SL): 2998.69
+2025-12-23 03:53:53,671 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:53:59,388 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:53:59,388 - INFO - 📉[INFO] ATR model level (not active SL): 2998.74
+2025-12-23 03:53:59,388 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:54:05,118 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:54:05,118 - INFO - 📉[INFO] ATR model level (not active SL): 2998.12
+2025-12-23 03:54:05,119 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:54:10,823 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:54:10,823 - INFO - 📉[INFO] ATR model level (not active SL): 2998.12
+2025-12-23 03:54:10,823 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:16,870 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:16,871 - INFO - 📉[INFO] ATR model level (not active SL): 2998.76
+2025-12-23 03:55:16,871 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:22,584 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:22,585 - INFO - 📉[INFO] ATR model level (not active SL): 2998.97
+2025-12-23 03:55:22,585 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:28,303 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:28,304 - INFO - 📉[INFO] ATR model level (not active SL): 2998.97
+2025-12-23 03:55:28,304 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:34,019 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:34,020 - INFO - 📉[INFO] ATR model level (not active SL): 2998.99
+2025-12-23 03:55:34,020 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:39,738 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:39,738 - INFO - 📉[INFO] ATR model level (not active SL): 2998.99
+2025-12-23 03:55:39,738 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:45,454 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:45,454 - INFO - 📉[INFO] ATR model level (not active SL): 2998.99
+2025-12-23 03:55:45,455 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:51,188 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:51,188 - INFO - 📉[INFO] ATR model level (not active SL): 2998.99
+2025-12-23 03:55:51,188 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:55:56,918 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:55:56,919 - INFO - 📉[INFO] ATR model level (not active SL): 2998.99
+2025-12-23 03:55:56,919 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:02,623 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:02,623 - INFO - 📉[INFO] ATR model level (not active SL): 2998.49
+2025-12-23 03:56:02,624 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:08,343 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:08,344 - INFO - 📉[INFO] ATR model level (not active SL): 2998.57
+2025-12-23 03:56:08,344 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:14,060 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:14,060 - INFO - 📉[INFO] ATR model level (not active SL): 2998.59
+2025-12-23 03:56:14,061 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:19,779 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:19,779 - INFO - 📉[INFO] ATR model level (not active SL): 2998.59
+2025-12-23 03:56:19,779 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:25,497 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:25,497 - INFO - 📉[INFO] ATR model level (not active SL): 2998.59
+2025-12-23 03:56:25,498 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:31,214 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:31,215 - INFO - 📉[INFO] ATR model level (not active SL): 2998.71
+2025-12-23 03:56:31,215 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:36,933 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:36,934 - INFO - 📉[INFO] ATR model level (not active SL): 2998.96
+2025-12-23 03:56:36,934 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:42,651 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:42,652 - INFO - 📉[INFO] ATR model level (not active SL): 2999.05
+2025-12-23 03:56:42,652 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:48,372 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:56:48,373 - INFO - 📉[INFO] ATR model level (not active SL): 2999.05
+2025-12-23 03:56:48,374 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:56:53,891 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-23 03:57:54,417 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:57:54,418 - INFO - 📉[INFO] ATR model level (not active SL): 2999.69
+2025-12-23 03:57:54,418 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:58:00,133 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:58:00,133 - INFO - 📉[INFO] ATR model level (not active SL): 2999.69
+2025-12-23 03:58:00,133 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:58:05,864 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:58:05,864 - INFO - 📉[INFO] ATR model level (not active SL): 2999.59
+2025-12-23 03:58:05,865 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 03:58:11,581 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 03:58:11,581 - INFO - 📉[INFO] ATR model level (not active SL): 2999.88
+2025-12-23 03:58:11,582 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 04:00:17,950 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 04:00:17,950 - INFO - 📉[INFO] ATR model level (not active SL): 3000.79
+2025-12-23 04:00:17,951 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 04:00:23,671 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 04:00:23,672 - INFO - 📉[INFO] ATR model level (not active SL): 3000.85
+2025-12-23 04:00:23,672 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 04:00:29,389 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 04:00:29,389 - INFO - 📉[INFO] ATR model level (not active SL): 3000.85
+2025-12-23 04:00:29,389 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 04:00:35,106 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 04:00:35,107 - INFO - 📉[INFO] ATR model level (not active SL): 3000.85
+2025-12-23 04:00:35,107 - INFO - 🔒 Fixed SL (protective): 3001.49
+2025-12-23 04:16:46,311 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.10)
+2025-12-23 04:17:46,634 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2025-12-23 04:18:46,959 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.20)
+2025-12-23 04:21:48,124 - INFO - [DI] Short setup +DI=5.20 -DI=40.60 ok=True
+2025-12-23 04:21:48,125 - INFO - [SIZE] px=2969.76 lev=50 -> qty=0.5
+2025-12-23 04:21:48,287 - INFO - Limit SELL order placed: Side=sell, Amount=0.5, Price=2972.97, ReduceOnly=False
+2025-12-23 04:23:00,368 - INFO - Limit BUY order placed: Side=buy, Amount=0.5, Price=2958.1992857142855, ReduceOnly=True
+2025-12-23 04:23:00,368 - INFO - 🔒 FIXED ATR SL set for SHORT at 2987.74 (entry=2972.97, ATR=4.92, x3, take_profit=2958.20)
+2025-12-23 04:23:00,559 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 04:23:00,559 - INFO - 📉[INFO] ATR model level (not active SL): 2987.74
+2025-12-23 04:23:00,559 - INFO - 🔒 Fixed SL (protective): 2987.74
+2025-12-23 11:00:18,322 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 11:00:18,328 - INFO - 📉[INFO] ATR model level (not active SL): 2981.71
+2025-12-23 11:00:18,328 - INFO - 🔒 Fixed SL (protective): 2987.74
+2025-12-23 11:00:18,579 - INFO - 🛑 Market BUY to close short position: {'info': {'orderId': '04a89149-ca40-4aac-8735-816633e963bb', 'orderLinkId': ''}, 'id': '04a89149-ca40-4aac-8735-816633e963bb', 'clientOrderId': None, 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': 'ETH/USDT:USDT', 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': [], 'stopPrice': None}
+2025-12-23 11:00:24,105 - INFO - [DI] Short setup +DI=12.08 -DI=33.40 ok=True
+2025-12-23 11:00:24,105 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-23 11:01:24,722 - INFO - [DI] Short setup +DI=12.08 -DI=33.40 ok=True
+2025-12-23 11:01:24,723 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2025-12-23 11:02:25,166 - INFO - Skip entry — stop-hunt candle detected.
+2025-12-23 11:10:29,768 - INFO - [DI] Short setup +DI=9.48 -DI=42.55 ok=True
+2025-12-23 11:10:29,774 - INFO - [SIZE] px=2982.23 lev=50 -> qty=0.5
+2025-12-23 11:10:29,920 - INFO - Limit SELL order placed: Side=sell, Amount=0.5, Price=2984.9119299999993, ReduceOnly=False
+2025-12-23 14:26:47,441 - INFO - Limit BUY order placed: Side=buy, Amount=0.5, Price=2965.180714285714, ReduceOnly=True
+2025-12-23 14:26:47,444 - INFO - 🔒 FIXED ATR SL set for SHORT at 3004.64 (entry=2984.91, ATR=6.58, x3, take_profit=2965.18)
+2025-12-23 14:26:47,633 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:26:47,634 - INFO - 📉[INFO] ATR model level (not active SL): 3004.64
+2025-12-23 14:26:47,635 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:26:53,350 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:26:53,350 - INFO - 📉[INFO] ATR model level (not active SL): 3004.70
+2025-12-23 14:26:53,351 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:26:59,067 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:26:59,068 - INFO - 📉[INFO] ATR model level (not active SL): 3004.86
+2025-12-23 14:26:59,068 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:04,786 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:04,787 - INFO - 📉[INFO] ATR model level (not active SL): 3003.24
+2025-12-23 14:27:04,787 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:10,505 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:10,505 - INFO - 📉[INFO] ATR model level (not active SL): 3003.24
+2025-12-23 14:27:10,505 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:16,233 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:16,234 - INFO - 📉[INFO] ATR model level (not active SL): 3003.24
+2025-12-23 14:27:16,234 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:21,943 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:21,943 - INFO - 📉[INFO] ATR model level (not active SL): 3003.25
+2025-12-23 14:27:21,943 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:27,660 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:27,661 - INFO - 📉[INFO] ATR model level (not active SL): 3003.32
+2025-12-23 14:27:27,661 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:33,384 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:33,385 - INFO - 📉[INFO] ATR model level (not active SL): 3003.32
+2025-12-23 14:27:33,386 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:39,098 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:39,099 - INFO - 📉[INFO] ATR model level (not active SL): 3003.44
+2025-12-23 14:27:39,099 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:44,812 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:44,812 - INFO - 📉[INFO] ATR model level (not active SL): 3003.44
+2025-12-23 14:27:44,813 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:50,527 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:50,527 - INFO - 📉[INFO] ATR model level (not active SL): 3003.44
+2025-12-23 14:27:50,527 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:27:56,261 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:27:56,262 - INFO - 📉[INFO] ATR model level (not active SL): 3003.44
+2025-12-23 14:27:56,263 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:01,979 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:01,979 - INFO - 📉[INFO] ATR model level (not active SL): 3002.73
+2025-12-23 14:28:01,980 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:07,698 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:07,699 - INFO - 📉[INFO] ATR model level (not active SL): 3002.88
+2025-12-23 14:28:07,699 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:13,433 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:13,434 - INFO - 📉[INFO] ATR model level (not active SL): 3002.98
+2025-12-23 14:28:13,434 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:19,135 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:19,135 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:19,135 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:24,856 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:24,857 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:24,858 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:30,573 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:30,574 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:30,574 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:36,292 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:36,293 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:36,293 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:42,010 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:42,010 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:42,010 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:47,745 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:47,746 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:47,746 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:53,447 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:53,447 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:53,447 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:28:59,164 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:28:59,165 - INFO - 📉[INFO] ATR model level (not active SL): 3003.13
+2025-12-23 14:28:59,165 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:04,882 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:04,883 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:04,883 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:10,608 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:10,609 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:10,609 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:16,325 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:16,325 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:16,326 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:22,045 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:22,045 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:22,046 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:27,775 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:27,776 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:27,777 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:33,482 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:33,482 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:33,483 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:39,201 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:39,202 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:39,203 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:44,920 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:44,920 - INFO - 📉[INFO] ATR model level (not active SL): 3002.51
+2025-12-23 14:29:44,921 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:50,645 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:50,646 - INFO - 📉[INFO] ATR model level (not active SL): 3002.64
+2025-12-23 14:29:50,646 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:29:56,367 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:29:56,367 - INFO - 📉[INFO] ATR model level (not active SL): 3002.64
+2025-12-23 14:29:56,368 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:02,085 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:02,086 - INFO - 📉[INFO] ATR model level (not active SL): 3002.17
+2025-12-23 14:30:02,086 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:07,815 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:07,815 - INFO - 📉[INFO] ATR model level (not active SL): 3002.54
+2025-12-23 14:30:07,815 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:13,521 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:13,521 - INFO - 📉[INFO] ATR model level (not active SL): 3002.91
+2025-12-23 14:30:13,521 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:19,239 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:19,239 - INFO - 📉[INFO] ATR model level (not active SL): 3002.91
+2025-12-23 14:30:19,240 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:24,954 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:24,955 - INFO - 📉[INFO] ATR model level (not active SL): 3002.91
+2025-12-23 14:30:24,955 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:30,673 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:30,673 - INFO - 📉[INFO] ATR model level (not active SL): 3002.91
+2025-12-23 14:30:30,674 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:36,392 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:36,392 - INFO - 📉[INFO] ATR model level (not active SL): 3002.91
+2025-12-23 14:30:36,392 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:42,109 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:42,110 - INFO - 📉[INFO] ATR model level (not active SL): 3003.01
+2025-12-23 14:30:42,110 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:47,827 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:47,828 - INFO - 📉[INFO] ATR model level (not active SL): 3003.01
+2025-12-23 14:30:47,828 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:53,540 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:53,540 - INFO - 📉[INFO] ATR model level (not active SL): 3003.01
+2025-12-23 14:30:53,541 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:30:59,263 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:30:59,265 - INFO - 📉[INFO] ATR model level (not active SL): 3003.01
+2025-12-23 14:30:59,265 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:04,981 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:04,982 - INFO - 📉[INFO] ATR model level (not active SL): 2998.65
+2025-12-23 14:31:04,982 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:10,706 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:10,707 - INFO - 📉[INFO] ATR model level (not active SL): 2999.08
+2025-12-23 14:31:10,708 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:16,424 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:16,425 - INFO - 📉[INFO] ATR model level (not active SL): 2999.11
+2025-12-23 14:31:16,426 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:22,145 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:22,146 - INFO - 📉[INFO] ATR model level (not active SL): 2999.11
+2025-12-23 14:31:22,147 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:27,878 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:27,878 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:27,879 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:33,595 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:33,595 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:33,595 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:39,309 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:39,310 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:39,310 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:45,028 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:45,029 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:45,029 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:50,755 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:50,756 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:50,756 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:31:56,478 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:31:56,479 - INFO - 📉[INFO] ATR model level (not active SL): 2999.28
+2025-12-23 14:31:56,479 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:02,195 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:02,195 - INFO - 📉[INFO] ATR model level (not active SL): 2997.52
+2025-12-23 14:32:02,196 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:07,912 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:07,912 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:07,913 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:13,630 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:13,630 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:13,631 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:19,358 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:19,358 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:19,359 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:25,074 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:25,075 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:25,075 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:30,800 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:30,801 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:30,801 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:36,517 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:36,518 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:36,519 - INFO - 🔒 Fixed SL (protective): 3004.64
+2025-12-23 14:32:42,233 - INFO - ✅ In a short position, size=0.5. Checking exit logic...
+2025-12-23 14:32:42,234 - INFO - 📉[INFO] ATR model level (not active SL): 2997.76
+2025-12-23 14:32:42,234 - INFO - 🔒 Fixed SL (protective): 3004.64

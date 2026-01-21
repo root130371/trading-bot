@@ -1,0 +1,127 @@
+2026-01-20 00:22:27,199 - INFO - Leverage already set to 50x for ETH/USDT:USDT
+2026-01-20 00:22:27,296 - INFO - DEBUG: position returned: None (type: <class 'NoneType'>)
+2026-01-20 07:10:44,933 - INFO - [DI] Short setup +DI=3.31 -DI=51.37 ok=True
+2026-01-20 07:10:44,944 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 07:12:46,169 - INFO - [DI] Short setup +DI=3.31 -DI=51.37 ok=True
+2026-01-20 07:12:46,170 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 07:14:47,433 - INFO - [DI] Short setup +DI=3.31 -DI=51.37 ok=True
+2026-01-20 07:14:47,434 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 07:15:48,050 - INFO - [DI] Short setup +DI=3.06 -DI=47.46 ok=True
+2026-01-20 07:15:48,050 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 07:16:48,669 - INFO - [DI] Short setup +DI=3.06 -DI=47.46 ok=True
+2026-01-20 07:16:48,670 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 07:23:52,155 - INFO - [DI] Short setup +DI=2.71 -DI=47.16 ok=True
+2026-01-20 07:23:52,155 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:26:19,410 - INFO - [DI] Short setup +DI=8.42 -DI=47.07 ok=True
+2026-01-20 14:26:19,424 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:27:20,114 - INFO - [DI] Short setup +DI=8.42 -DI=47.07 ok=True
+2026-01-20 14:27:20,119 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:30:22,027 - INFO - [DI] Short setup +DI=8.16 -DI=43.95 ok=True
+2026-01-20 14:30:22,028 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:35:24,674 - INFO - [DI] Short setup +DI=6.75 -DI=49.73 ok=True
+2026-01-20 14:35:24,680 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:36:25,479 - INFO - [DI] Short setup +DI=6.75 -DI=49.73 ok=True
+2026-01-20 14:36:25,501 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:45:34,521 - INFO - [DI] Short setup +DI=5.70 -DI=42.32 ok=True
+2026-01-20 14:45:34,523 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:46:35,150 - INFO - [DI] Short setup +DI=5.70 -DI=42.32 ok=True
+2026-01-20 14:46:35,151 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:48:36,408 - INFO - [DI] Short setup +DI=5.70 -DI=42.32 ok=True
+2026-01-20 14:48:36,408 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 14:49:36,852 - INFO - Skip entry — stop-hunt candle detected.
+2026-01-20 14:53:39,260 - INFO - [DI] Short setup +DI=5.07 -DI=45.48 ok=True
+2026-01-20 14:53:39,260 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 15:01:44,272 - INFO - [DI] Short setup +DI=4.38 -DI=41.31 ok=True
+2026-01-20 15:01:44,290 - INFO - [SIZE] px=3114.94 lev=50 -> qty=0.8
+2026-01-20 15:01:44,653 - INFO - Limit SELL order placed: Side=sell, Amount=0.8, Price=3118.0549399999995, ReduceOnly=False
+2026-01-20 15:03:44,909 - INFO - Limit SELL order placed: Side=sell, Amount=0.8, Price=3119.9868699999997, ReduceOnly=False
+2026-01-20 15:05:45,328 - INFO - Limit SELL order placed: Side=sell, Amount=0.8, Price=3118.7956799999997, ReduceOnly=False
+2026-01-20 15:07:45,905 - INFO - Limit SELL order placed: Side=sell, Amount=0.8, Price=3117.9047899999996, ReduceOnly=False
+2026-01-20 22:19:29,114 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.16)
+2026-01-20 22:20:29,487 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.23)
+2026-01-20 22:21:29,855 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
+2026-01-20 22:26:32,645 - INFO - [DI] Short setup +DI=9.97 -DI=42.69 ok=True
+2026-01-20 22:26:32,646 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 22:31:34,703 - INFO - [DI] Short setup +DI=10.16 -DI=41.24 ok=True
+2026-01-20 22:31:34,719 - INFO - [SIZE] px=3060.61 lev=50 -> qty=0.81
+2026-01-20 22:31:34,862 - INFO - Limit SELL order placed: Side=sell, Amount=0.81, Price=3061.8087499999997, ReduceOnly=False
+2026-01-20 22:33:37,205 - INFO - Limit BUY order placed: Side=buy, Amount=0.81, Price=3041.8407142857145, ReduceOnly=True
+2026-01-20 22:33:37,208 - INFO - 🔒 FIXED ATR SL set for SHORT at 3081.78 (entry=3061.81, ATR=6.66, x3, take_profit=3041.84)
+2026-01-20 22:33:37,392 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:33:37,396 - INFO - 📉[INFO] ATR model level (not active SL): 3081.78
+2026-01-20 22:33:37,398 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:36:44,159 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:36:44,160 - INFO - 📉[INFO] ATR model level (not active SL): 3084.67
+2026-01-20 22:36:44,161 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:36:49,885 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:36:49,886 - INFO - 📉[INFO] ATR model level (not active SL): 3084.82
+2026-01-20 22:36:49,887 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:36:55,604 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:36:55,605 - INFO - 📉[INFO] ATR model level (not active SL): 3085.20
+2026-01-20 22:36:55,606 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:37:01,329 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:37:01,330 - INFO - 📉[INFO] ATR model level (not active SL): 3085.20
+2026-01-20 22:37:01,330 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:38:07,398 - INFO - ✅ In a short position, size=0.81. Checking exit logic...
+2026-01-20 22:38:07,399 - INFO - 📉[INFO] ATR model level (not active SL): 3084.59
+2026-01-20 22:38:07,400 - INFO - 🔒 Fixed SL (protective): 3081.78
+2026-01-20 22:48:16,459 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.06)
+2026-01-20 22:49:16,815 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.18)
+2026-01-20 22:50:17,181 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.25)
+2026-01-20 22:51:17,538 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.28)
+2026-01-20 23:00:23,088 - INFO - [DI] Short setup +DI=9.14 -DI=34.49 ok=True
+2026-01-20 23:00:23,089 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 23:01:23,718 - INFO - [DI] Short setup +DI=9.14 -DI=34.49 ok=True
+2026-01-20 23:01:23,719 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 23:02:24,357 - INFO - [DI] Short setup +DI=9.14 -DI=34.49 ok=True
+2026-01-20 23:02:24,358 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-20 23:05:26,289 - INFO - [DI] Short setup +DI=7.54 -DI=41.08 ok=True
+2026-01-20 23:05:26,296 - INFO - Skip SHORT — overextended below EMA20 (0.55%).
+2026-01-20 23:18:34,591 - INFO - [DI] Short setup +DI=5.73 -DI=38.65 ok=True
+2026-01-20 23:18:34,595 - INFO - [SIZE] px=3013.47 lev=50 -> qty=0.82
+2026-01-20 23:18:34,777 - INFO - Limit SELL order placed: Side=sell, Amount=0.82, Price=3016.4934799999996, ReduceOnly=False
+2026-01-20 23:20:35,246 - INFO - Limit SELL order placed: Side=sell, Amount=0.82, Price=3011.7487399999995, ReduceOnly=False
+2026-01-20 23:22:23,277 - INFO - Limit BUY order placed: Side=buy, Amount=0.82, Price=2984.9557142857147, ReduceOnly=True
+2026-01-20 23:22:23,278 - INFO - 🔒 FIXED ATR SL set for SHORT at 3038.54 (entry=3011.75, ATR=8.93, x3, take_profit=2984.96)
+2026-01-20 23:22:23,477 - INFO - ✅ In a short position, size=0.82. Checking exit logic...
+2026-01-20 23:22:23,478 - INFO - 📉[INFO] ATR model level (not active SL): 3038.54
+2026-01-20 23:22:23,479 - INFO - 🔒 Fixed SL (protective): 3038.54
+2026-01-21 01:38:20,437 - INFO - Skip entry — ADX 43.25 (prev 43.28) not strong+rising.
+2026-01-21 01:46:23,563 - INFO - [DI] Short setup +DI=12.79 -DI=35.23 ok=True
+2026-01-21 01:46:23,569 - INFO - [SIZE] px=2988.24 lev=50 -> qty=0.83
+2026-01-21 01:46:23,710 - INFO - Limit SELL order placed: Side=sell, Amount=0.83, Price=2990.7077199999994, ReduceOnly=False
+2026-01-21 01:52:37,247 - INFO - Limit BUY order placed: Side=buy, Amount=0.83, Price=2973.955, ReduceOnly=True
+2026-01-21 01:52:37,247 - INFO - 🔒 FIXED ATR SL set for SHORT at 3007.47 (entry=2990.71, ATR=5.58, x3, take_profit=2973.95)
+2026-01-21 01:52:37,442 - INFO - ✅ In a short position, size=0.83. Checking exit logic...
+2026-01-21 01:52:37,443 - INFO - 📉[INFO] ATR model level (not active SL): 3007.47
+2026-01-21 01:52:37,443 - INFO - 🔒 Fixed SL (protective): 3007.47
+2026-01-21 06:37:17,284 - INFO - Skip entry — ADX 23.11 (prev 18.58) not strong+rising.
+2026-01-21 06:38:17,815 - INFO - Skip entry — ADX 23.11 (prev 18.58) not strong+rising.
+2026-01-21 06:39:18,335 - INFO - Skip entry — ADX 23.11 (prev 18.58) not strong+rising.
+2026-01-21 06:43:20,736 - INFO - [DI] Short setup +DI=5.30 -DI=53.54 ok=True
+2026-01-21 06:43:20,741 - INFO - Skip SHORT — overextended below EMA20 (0.53%).
+2026-01-21 06:46:22,595 - INFO - [DI] Short setup +DI=4.84 -DI=49.29 ok=True
+2026-01-21 06:46:22,596 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-21 06:52:26,322 - INFO - [DI] Short setup +DI=4.60 -DI=47.13 ok=True
+2026-01-21 06:52:26,322 - INFO - Skip SHORT — no clean pullback & rejection from EMA20.
+2026-01-21 06:58:29,566 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.24)
+2026-01-21 06:59:29,907 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.17)
+2026-01-21 07:00:30,234 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.07)
+2026-01-21 07:02:30,923 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.15)
+2026-01-21 07:03:31,273 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.08)
+2026-01-21 07:04:31,602 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2026-01-21 07:05:31,935 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.00)
+2026-01-21 07:06:32,261 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.01)
+2026-01-21 07:07:32,610 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.08)
+2026-01-21 07:08:32,935 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.09)
+2026-01-21 07:09:33,271 - INFO - Skip entry — regime filter failed (ATR rising=False, R²=0.15)
+2026-01-21 07:17:36,151 - INFO - [DI] Short setup +DI=5.46 -DI=41.01 ok=True
+2026-01-21 07:17:36,164 - INFO - [SIZE] px=2935.05 lev=50 -> qty=0.85
+2026-01-21 07:17:36,303 - INFO - Limit SELL order placed: Side=sell, Amount=0.85, Price=2937.2242899999997, ReduceOnly=False
+2026-01-21 07:19:37,162 - INFO - Limit SELL order placed: Side=sell, Amount=0.85, Price=2936.6737399999993, ReduceOnly=False
+2026-01-21 07:21:37,960 - INFO - Limit SELL order placed: Side=sell, Amount=0.85, Price=2938.8258899999996, ReduceOnly=False
+2026-01-21 07:26:49,380 - INFO - Limit BUY order placed: Side=buy, Amount=0.85, Price=2924.5007142857144, ReduceOnly=True
+2026-01-21 07:26:49,381 - INFO - 🔒 FIXED ATR SL set for SHORT at 2953.16 (entry=2938.83, ATR=4.78, x3, take_profit=2924.50)
+2026-01-21 07:26:49,580 - INFO - ✅ In a short position, size=0.85. Checking exit logic...
+2026-01-21 07:26:49,580 - INFO - 📉[INFO] ATR model level (not active SL): 2953.16
+2026-01-21 07:26:49,580 - INFO - 🔒 Fixed SL (protective): 2953.16
